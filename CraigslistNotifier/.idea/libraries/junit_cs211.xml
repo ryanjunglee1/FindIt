@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="junit-cs211">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../Lab 1/src/junit-cs211.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

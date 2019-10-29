@@ -4,6 +4,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class WebScraper {
 	protected Document website;
@@ -23,7 +24,7 @@ public class WebScraper {
 		try {
 			website = Jsoup.connect("https://" + area + ".craigslist.org/search/" + topic + "?").get();
 		}
-		catch(Exception IOException) {
+		catch(IOException e) {
 			website = null;
 		}
 	}
