@@ -1,3 +1,3 @@
 # CraigslistNotifier
 
-This is a test to see how changes work in Branches
+This is Arti's branch for craigslist notifier
