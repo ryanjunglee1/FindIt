@@ -1,17 +1,25 @@
-public class SubArea extends Area{
-	private String subArea;
-	private HashMap<String, String> topicMap;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Attributes;
 
-	public subArea(String area, String subArea) {
-		super(area, subArea);
-		topicMap = new HashMap<String, String>();
+import java.util.ArrayList;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
+import java.util.HashMap;
+
+public class SubArea extends Area{
+
+	public SubArea(Search area, String subArea) {
+		super(area, area.getArea());
+		this.subArea = subArea;
 		
 		//set topicMap
-		Elements topicItems = website.getElementById("catAbb").children();
-		topicItems = topicItems.nextAll();
+		Elements topicItems = website.getElementById("catAbb").getElementsByAttribute("value");
 		for (Element item: topicItems) {
-			Attributes myAttributes = item.attributes();
-			topicMap.put(myAttributes.get("title"), myAttributes.get(topic));
+			topicMap.put(item.html(), item.attributes().get("value"));
 		}
 	}
 }

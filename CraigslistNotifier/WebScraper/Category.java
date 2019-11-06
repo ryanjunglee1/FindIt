@@ -1,3 +1,6 @@
 public class Category extends Topic{
-	private String category;
+	public Category(Search topic, String category) {
+		super(topic, topic.getTopic());
+		this.category = category;
+	}
 }

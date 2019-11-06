@@ -1,8 +1,7 @@
-public class SearchKeyword extends WebScraper{
+public class SearchKeyword extends Webscraper{
     private String keyword;
-    public SearchKeyword(WebScraper webScraper, String keyword) {
-        super(webScraper.getArea(), webScraper.getSubArea(), webScraper.getCategory());
+    public SearchKeyword(Search search, String keyword) {
+        super(search);
         this.keyword = keyword;
-        
     }
 }
