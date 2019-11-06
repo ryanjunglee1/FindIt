@@ -1,3 +1,9 @@
+import java.util.HashMap;
+import java.util.jar.Attributes;
+
+import javax.lang.model.util.Elements;
+import javax.swing.text.Element;
+
 public class Area extends WebScraper{
 	private HashMap<String, String> subAreaMap;
 

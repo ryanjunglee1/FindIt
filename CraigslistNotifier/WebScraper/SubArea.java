@@ -1,8 +1,10 @@
+import java.util.HashMap;
+
 public class SubArea extends Area{
 	private String subArea;
 	private HashMap<String, String> topicMap;
 
-	public subArea(String area, String subArea) {
+	public SubArea(String area, String subArea) {
 		super(area, subArea);
 		topicMap = new HashMap<String, String>();
 		
