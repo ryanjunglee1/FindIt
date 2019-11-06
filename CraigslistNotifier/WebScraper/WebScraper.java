@@ -21,10 +21,10 @@ public class Webscraper {
 
 		try {
 			if (search instanceof Topic) {
-				website = Jsoup.connect(search.getWebsite() + "/search/" + search.getTopicMap().get(search.getTopic())).get();
+				website = Jsoup.connect(search.getWebsite().location() + "/search/" + search.getTopicMap().get(search.getTopic())).get();
 			}
 			else if (search instanceof Category)
-				website = Jsoup.connect(search.getWebsite() + "/search/" + search.getCategoryMap().get(search.getCategory())).get();
+				website = Jsoup.connect(search.getWebsite().location() + "/search/" + search.getCategoryMap().get(search.getCategory())).get();
 			else
 				throw new Exception("Not a topic or category");
 		}

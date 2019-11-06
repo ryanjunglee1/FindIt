@@ -14,20 +14,20 @@ public class State extends Search {
 
 	public State(String state) {
 		this.state = state;
-		website = this.stateMap.get(state);
-		Elements areaItems = this.website.getElementsByClass("geo-site-list-container");
-		if (areaItems.size() > 0) {
-			areaItems = areaItems.first().children().get(1).children();
-			try {
+		try {
+			website = Jsoup.connect(this.stateMap.get(state)).get();
+			Elements areaItems = this.website.getElementsByClass("geo-site-list-container");
+			if (areaItems.size() > 0) {
+				areaItems = areaItems.first().children().get(1).children();
 				hasArea = true;
 				for (Element areaItem: areaItems) {
 					Element myItem = areaItem.children().first();
-					areaMap.put(myItem.html(), Jsoup.connect(myItem.attributes().get("href")).get());
+					areaMap.put(myItem.html(), myItem.attributes().get("href"));
 				}
 			}
-			catch (IOException e) {
-				System.out.println("Website not found.");
-			}
+		}
+		catch (IOException e) {
+			System.out.println("Website not Found.");
 		}
 	}
 }

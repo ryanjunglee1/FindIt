@@ -12,8 +12,7 @@ import java.util.HashMap;
 
 public class Search {
 	protected Document website;
-	protected HashMap<String, Document> stateMap, areaMap;
-	protected HashMap<String, String> subAreaMap, topicMap, categoryMap;
+	protected HashMap<String, String> stateMap, areaMap, subAreaMap, topicMap, categoryMap;
 	protected String state, area, subArea, topic, category;
 	protected boolean hasArea, hasSubArea;
 
@@ -23,8 +22,8 @@ public class Search {
 		this.subArea = subArea;
 		this.topic = topic;
 		this.category = category;
-		this.stateMap = new HashMap<String, Document>();
-		this.areaMap = new HashMap<String, Document>();
+		this.stateMap = new HashMap<String, String>();
+		this.areaMap = new HashMap<String, String>();
 		this.subAreaMap = new HashMap<String, String>();
 		this.topicMap = new HashMap<String, String>();
 		this.categoryMap = new HashMap<String, String>();
@@ -35,7 +34,7 @@ public class Search {
 			Elements areaItems = acItems.get(2).children();
 			for (Element areaItem: areaItems) {
 				Element myItem = areaItem.children().first();
-				stateMap.put(myItem.html(), Jsoup.connect("https:" + myItem.attributes().get("href")).get());
+				stateMap.put(myItem.html(), "https:" + myItem.attributes().get("href"));
 			}
 		}
 		catch(IOException e) {
@@ -72,11 +71,11 @@ public class Search {
 
 	public void setCategory(String category) { this.category = category; }
 
-	public HashMap<String, Document> getStateMap() { return stateMap; }
+	public HashMap<String, String> getStateMap() { return stateMap; }
 
-	public void setStateMap(HashMap<String, Document> states) { this.stateMap = stateMap; }
+	public void setStateMap(HashMap<String, String> states) { this.stateMap = stateMap; }
 
-	public HashMap<String, Document> getAreaMap() { return areaMap; }
+	public HashMap<String, String> getAreaMap() { return areaMap; }
 
 	public HashMap<String, String> getSubAreaMap() { return subAreaMap; }
 

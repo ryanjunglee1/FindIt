@@ -19,7 +19,7 @@ public class Area extends State {
 				throw new Exception("Area does not exist in the state.");
 
 			this.area = area;
-			this.website = getAreaMap().get(area);
+			this.website = Jsoup.connect(getAreaMap().get(area)).get();
 	
 			Elements subAreaItems = website.getElementsByClass("sublinks");
 			if (subAreaItems.size() > 0) {
