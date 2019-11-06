@@ -24,9 +24,9 @@ public class SearchQuery {
 	public SearchResult getSearch() {
 		//Block of code that simulates webscraper returning an arraylist of items based on required conditions
 		ArrayList<Item> testList = new ArrayList<Item>();
-		Item testItem = new Item("word 1","Description");
-		Item testItem2 = new Item("word 2","Description");
-		Item testItem3 = new Item("word 3","Description");
+		Item testItem = new Item("Fridge","brand new fridge");
+		Item testItem2 = new Item("TV","slightly used TV");
+		Item testItem3 = new Item("Motorcycle","For parts only broken motorcycle");
 		testList.add(testItem);
 		testList.add(testItem2);
 		testList.add(testItem3);
@@ -49,7 +49,7 @@ public class SearchQuery {
 				}
 			}
 		}
-		
+		result.printItems();
 		return result;
 	}
 	
