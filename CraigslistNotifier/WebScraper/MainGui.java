@@ -43,7 +43,8 @@ public class MainGui implements ActionListener{
 		clicks++;
 		String labeltext = this.textfield.getText();
 		String[] guiTest = {labeltext};
-		SearchQuery q = new SearchQuery(guiTest);
+		Search s = SearchQuery.newSearch();
+		SearchQuery q = new SearchQuery(guiTest,s);
 		q.getSearch();
         label.setText(labeltext);
 		
