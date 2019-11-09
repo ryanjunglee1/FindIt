@@ -1,35 +1,52 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Attributes;
 
-public class WebScraper {
-	protected Document website;
-	protected String area;
-	protected String region;
-	protected String topic;
+import java.util.ArrayList;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
+import java.util.HashMap;
 
-	public WebScraper(String area, String region, String topic) {
-		this.area = area;
-		this.region = region;
-		this.topic = topic;
+public class Webscraper {
+	Document website;
+	Search search;
+	String keyword;
+
+	public Webscraper(Search search) {
+		this.search = search;
+		this.keyword = keyword;
+
 		try {
-			website = Jsoup.connect("https://" + area + ".craigslist.org/" + region + "/" + topic).get();
+			if (search instanceof Topic) {
+				website = Jsoup.connect(search.getWebsite().location() + "/search/" + search.getTopicMap().get(search.getTopic())).get();
+			}
+			else if (search instanceof Category)
+				website = Jsoup.connect(search.getWebsite().location() + "/search/" + search.getCategoryMap().get(search.getCategory())).get();
+			else
+				throw new Exception("Not a topic or category");
 		}
-		catch(Exception IOException) {
+		catch(IOException e) {
 			website = null;
+			System.out.println("Website not found.");
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
-	public WebScraper(String area) {
-		this(area, "", "");
+	@Override
+	public String toString() {
+		if (website == null)
+			return "No such website";
+
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+
+		printWriter.printf("Website URL: %s\nWebsite Name: %s\nState: %s\nArea: %s\nSub Area: %s\nTopic: %s\nCategory: %s\n", website.location(), website.title(), search.getState(), search.getArea(), search.getSubArea(), search.getTopic(), search.getCategory());
+
+		return stringWriter.toString();
 	}
-
-	public WebScraper(String area, String region) {
-		this(area, region, "");
-	}
-
-	public String getArea() { return area; }
-
-	public String getRegion() { return region; }
-
-	public String getTopic() { return topic; }
 }
