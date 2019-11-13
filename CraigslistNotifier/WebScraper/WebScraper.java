@@ -94,58 +94,6 @@ public class WebScraper {
 
 	}
 
-	private void removeFromArray(String[] arr, String str) {
-
-		//binary search
-		int index;
-		int mid;
-		int low = 0;
-		int high = arr.length - 1;
-		while (true) {
-			mid = (low + high) / 2;
-			int compare = str.compareTo(arr[mid]);
-			if (compare == 0) {
-				index = mid;
-				break;
-			}
-			else if (low >= high) {
-				System.out.println("String does not exist in the array.");
-				return;
-			}
-			else if (compare < 0) {
-				high = mid - 1;
-			}
-			else {
-				low = mid + 1;
-			}
-		}
-		while(index < arr.length - 1) {
-			arr[index] = arr[index + 1];
-			++index;
-		}
-		arr[index] = "";
-	}
-
-	private void sortArray(String[] arr, int low, int high) {
-		if (low < high) {
-			int index = low;
-			String pivot = arr[high];
-			for (int i = low; i < high; ++i) {
-				if (arr[i].compareTo(pivot) < 0) {
-					String temp = arr[index];
-					arr[index] = arr[i];
-					arr[i] = temp;
-					++index;
-				}
-			}
-			String temp = arr[index];
-			arr[index] = arr[high];
-			arr[high] = temp;
-			sortArray(arr, low, index - 1);
-			sortArray(arr, index + 1, high);
-		}
-	}
-
 	@Override
 	public String toString() {
 		if (website == null)
