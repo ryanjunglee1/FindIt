@@ -14,7 +14,7 @@ public class Search {
 	protected Document website;
 	protected HashMap<String, String> stateMap, areaMap, subAreaMap, topicMap, categoryMap;
 	protected String state, area, subArea, topic, category;
-	protected boolean hasArea, hasSubArea;
+	protected boolean hasArea, hasSubArea, hasCategory;
 
 	public Search(String state, String area, String subArea, String topic, String category) {
 		this.state = state;
@@ -36,6 +36,7 @@ public class Search {
 				Element myItem = areaItem.children().first();
 				stateMap.put(myItem.html(), "https:" + myItem.attributes().get("href"));
 			}
+			stateMap.remove("more ...");
 		}
 		catch(IOException e) {
 			website = null;
@@ -53,23 +54,33 @@ public class Search {
 
 	public String getState() { return state; }
 
-	public void setState(String state) { this.state = state; }
+	public void setState(String state) {
+		this.state = state;
+	}
 
 	public String getArea() { return area; }
 
-	public void setArea(String area) { this.area = area; }
+	public void setArea(String area) {
+		this.area = area;
+	}
 
 	public String getSubArea() { return subArea; }
 
-	public void setsubArea(String subArea) { this.subArea = subArea; }
+	public void setSubArea(String subArea) {
+		this.subArea = subArea;
+	}
 
 	public String getTopic() { return topic; }
 
-	public void setTopic(String topic) { this.topic = topic; }
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
 
 	public String getCategory() { return category; }
 
-	public void setCategory(String category) { this.category = category; }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
 	public HashMap<String, String> getStateMap() { return stateMap; }
 
@@ -77,11 +88,90 @@ public class Search {
 
 	public HashMap<String, String> getAreaMap() { return areaMap; }
 
+	public boolean setAreaMap() {
+		try {
+			website = Jsoup.connect(this.stateMap.get(state)).get();
+			Elements areaItems = this.website.getElementsByClass("geo-site-list-container");
+			if (areaItems.size() > 0) {
+				areaItems = areaItems.first().children().get(1).children();
+				hasArea = true;
+				for (Element areaItem: areaItems) {
+					Element myItem = areaItem.children().first();
+					areaMap.put(removeBold(myItem.html()), myItem.attributes().get("href"));
+				}
+			}
+		}
+		catch (IOException e) {
+			System.out.println("Website not Found.");
+		}
+
+		return hasArea;
+	}
+
 	public HashMap<String, String> getSubAreaMap() { return subAreaMap; }
+
+	public boolean setSubAreaMap() {
+		try {
+			if (hasArea)
+				this.website = Jsoup.connect(areaMap.get(area)).get();
+	
+			Elements subAreaItems = website.getElementsByClass("sublinks");
+			if (subAreaItems.size() > 0) {
+				//set subAreaMap
+				subAreaItems = subAreaItems.first().children();
+				hasSubArea = true;
+				for (Element item: subAreaItems) {
+					item = item.children().first();
+					Attributes myAttributes = item.attributes();
+					subAreaMap.put(myAttributes.get("title"), item.html());
+				}
+			}
+		}
+		catch (IOException e) {
+			System.out.println("Website not found.");
+		}
+
+		return hasSubArea;
+	}
 
 	public HashMap<String, String> getTopicMap() { return topicMap; }
 
+	public void setTopicMap() {
+		Elements topicItems = website.getElementById("catAbb").getElementsByAttribute("value");
+		for (Element item: topicItems) {
+			topicMap.put(removeBold(item.html()), item.attributes().get("value"));
+		}
+		if (this.state.equals("puerto rico")) {
+			topicMap.remove("seleccionar categoría");
+			topicMap.remove("eventos");
+		}
+		else {
+			topicMap.remove("select category");
+			topicMap.remove("events");
+		}
+	}
+
 	public HashMap<String, String> getCategoryMap() { return categoryMap; }
+
+	public boolean setCategoryMap() {
+		System.out.println(getTopicMap().get(topic));
+		Elements categoryItems = website.getElementById(getTopicMap().get(topic)).getElementsByClass("cats").first().children();
+		if (categoryItems.size() > 0) {
+			hasCategory = true;
+			for (Element item: categoryItems) {
+				for (Element category: item.children()) {
+					category = category.children().first();
+					String name = category.children().first().html();
+					categoryMap.put(name.substring(0, name.indexOf('<')).replaceAll("&nbsp;", " ").replaceAll("amp;", ""), category.attributes().get("class"));
+				}
+			}
+		}
+		return hasCategory;
+	}
+
+	private String removeBold(String str) {
+		return str.replaceAll("<b>", "").replaceAll("</b>", "");
+	}
 
 	public boolean hasArea() { return hasArea; }
 
