@@ -94,6 +94,27 @@ public class WebScraper {
 
 	}
 
+	
+	private void sortArray(String[] arr, int low, int high) {
+		if (low < high) {
+			int index = low;
+			String pivot = arr[high];
+			for (int i = low; i < high; ++i) {
+				if (arr[i].compareTo(pivot) < 0) {
+					String temp = arr[index];
+					arr[index] = arr[i];
+					arr[i] = temp;
+					++index;
+				}
+			}
+			String temp = arr[index];
+			arr[index] = arr[high];
+			arr[high] = temp;
+			sortArray(arr, low, index - 1);
+			sortArray(arr, index + 1, high);
+		}
+	}
+
 	@Override
 	public String toString() {
 		if (website == null)
