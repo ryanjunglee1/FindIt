@@ -27,17 +27,19 @@ public class SearchQuery {
 	protected int milerange, zipcode, descriptionLengthMin, descriptionLengthMax;
 	protected float minPrice, maxPrice;
 	protected LocalTime startDate,endDate;
-	protected Webscraper scraper;
+	protected WebScraper scraper;
 	
 	/*
 	 * Accepts an array of keywords to search with, and creates a new webscraper from the default search provided
 	 * @param String[] keywords are the keywords to be searched for Items
 	 * @param Search search is the default search that includes required parameters like area, subarea, and topic before keywords
 	 */
-	public SearchQuery(String[] keywords, Search search) {
-		this.search = search;
+	public SearchQuery(String[] keywords) {
+		//this.search = search;
 		this.searchKeywordsPositive = keywords;
-		scraper = new Webscraper(search);
+		this.search = new Search();
+		Scanner scan = new Scanner(System.in);
+		scraper = new WebScraper(search, scan);
 	}
 	
 	/*
@@ -154,10 +156,11 @@ public class SearchQuery {
 	
 	
 	public static void main(String[] args) {
+		/*
 		String[] testkeywords = {"Ford", "Audi", "Toyota"};
 		SearchQuery q = new SearchQuery(testkeywords, newSearch());
 		q.getSearch();
-		
+		*/
 		//SearchQuery query = new SearchQuery(testkeywords);
 		//SearchResult result = query.getSearch();
 		//result.printItems();
