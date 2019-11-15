@@ -10,6 +10,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Attributes;
 
+/*
+ * An object that represents a user requested search based on parameters entered from the GUI, uses a 
+ * search object to contain the default search conditions provided by CL and additional parameters 
+ * based on custom search functions provided in the GUI. Uses a webscraper object to get the base URL
+ * from search object 
+ * @author Arti Shala
+ * @version 1.0
+ */
 public class SearchQuery {
 	protected Search search;
 	protected String[] searchKeywordsPositive, searchKeywordsNegative;
@@ -21,15 +29,22 @@ public class SearchQuery {
 	protected LocalTime startDate,endDate;
 	protected Webscraper scraper;
 	
-	//Current functionality, creates a new searchquery that will be able to get items from webscraper and only show those 
-	// that  contain one of the keywords specified
+	/*
+	 * Accepts an array of keywords to search with, and creates a new webscraper from the default search provided
+	 * @param String[] keywords are the keywords to be searched for Items
+	 * @param Search search is the default search that includes required parameters like area, subarea, and topic before keywords
+	 */
 	public SearchQuery(String[] keywords, Search search) {
 		this.search = search;
 		this.searchKeywordsPositive = keywords;
 		scraper = new Webscraper(search);
 	}
 	
-	public String[] getSearch(){
+	/*
+	 * 
+	 * @return a SearchResult object containing all the items that fit the search parameters
+	 */
+	public SearchResult getSearch(){
 		//Block of code that simulates webscraper returning an arraylist of items based on required conditions
 		String baseURL = scraper.website.location();
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
@@ -55,7 +70,6 @@ public class SearchQuery {
 			for (String s : itemURL) {
 				System.out.println(s);
 			}
-			
 		}
 		
 		/*
