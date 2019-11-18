@@ -25,20 +25,30 @@ public class Item {
 		this.website = Jsoup.connect(itemURL).get();
 		this.itemName = website.getElementById("titletextonly").html();
 		this.description = website.getElementById("postingbody").html();
+		/*
 		Element contact = website.getElementsByClass("mailapp").first();
 		this.contactInfo = contact.html();
 		this.contactMailLink = contact.attributes().get("href");
 		this.contactMailLink = this.contactMailLink.substring(0, this.contactMailLink.length() > 100 ? 100 : this.contactMailLink.length());
-		this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html());
+		*/
+		try {
+		this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
+		} catch (NullPointerException e) {
+			this.itemPrice = 0.00f;
+		}
+		/*
 		this.location = website.getElementsByClass("postingtitletext").first().html();
 		this.location = this.location.substring(this.location.indexOf("("), this.location.indexOf(")") + 1);
+		
 		Elements times = website.getElementsByClass("date timeago");
 		this.dateTimePosted = times.get(1).attributes().get("title");
 		this.dateTimeUpdated = times.get(2).attributes().get("title");
+		
 		Elements images = website.getElementById("thumbs").children();
 		for (Element image: images) {
 			itemImages.add(image.children().first().attributes().get("src"));
 		}
+		*/
 	}
 	
 	public Item(String name, String description) {

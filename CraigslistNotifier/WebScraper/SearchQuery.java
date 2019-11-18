@@ -43,7 +43,7 @@ public class SearchQuery {
 	}
 	
 	/*
-	 * 
+	 * takes a search and keyword and prints out the first 50 items with their price under those parameters
 	 * @return a SearchResult object containing all the items that fit the search parameters
 	 */
 	public SearchResult getSearch(){
@@ -74,9 +74,9 @@ public class SearchQuery {
 				//System.out.println(s);
 				try {
 					if (!s.isEmpty()) {
-						System.out.println("Item URL: " + s);
 						Item item = new Item(s);
-						//itemarraylist.add(new Item(s));
+						itemarraylist.add(item);
+						System.out.println(item);
 					}
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
