@@ -1,0 +1,7 @@
+Progress so far:
+
+The GUI is able to accept a state, area, subarea, topic, category, and keyword from the user. It will automatically update the options of the drop down depending on other selected options. Clicking search will create item objects for the top 50 items corresponding to the search query and output their name and price to the console.
+
+Goals we are working towards:
+
+Now that we can collect all the items as objects, we will work on parsing more information for each item, adding more advanced search features, graphically displaying the results, allowing for multiple search queries, and enabling the search to update at a user specified interval and send an email when new items are posted under a specific search parameter.
