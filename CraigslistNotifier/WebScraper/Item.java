@@ -7,7 +7,6 @@ import org.jsoup.nodes.Attributes;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.time.LocalTime;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -16,7 +15,7 @@ import java.util.Scanner;
 public class Item {
 	protected String itemName, make, model, description, contactInfo, contactMailLink, location, datePosted, dateUpdated;
 	protected float itemPrice;
-	protected LocalTime dateTimePosted,dateTimeUpdated;
+	protected String dateTimePosted,dateTimeUpdated;
 	protected String itemURL; //change later when URL class is defined
 	protected ArrayList<String> itemImages; // change later to arraylist of URL 
 	protected Document website;
@@ -49,6 +48,6 @@ public class Item {
 	
 	@Override
 	public String toString() {
-		return this.itemName;
+		return this.itemName + " $" + this.itemPrice;
 	}
 }

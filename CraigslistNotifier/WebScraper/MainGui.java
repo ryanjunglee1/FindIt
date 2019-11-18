@@ -1,7 +1,10 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.ItemSelectable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -20,7 +23,7 @@ import javax.swing.JTextField;
  * @version 1.0
  */
 public class MainGui implements ActionListener{
-	private int clicks = 0;
+	//Define all GUI elements
 	private JFrame frame = new JFrame();
 	private JPanel basicsearch = new JPanel();
 	private JLabel keywordlabel = new JLabel("Enter search keyword: ");
@@ -45,37 +48,111 @@ public class MainGui implements ActionListener{
 	 */
 	public MainGui() {
 		
-		button.addActionListener(this);
-		search = new Search();
-		String[] statechoices = search.getStateMap().keySet().toArray(new String[0]);
-		String[] topicchoices = search.getTopicMap().keySet().toArray(new String[0]);
-		String[] testchoices = {"TEST", "TEST2", "TEST3"};
-		stateselect = new JComboBox<String>(statechoices);
+		button.addActionListener(this); //adds the actionPerformed method to the button
+		search = new Search(); //reset the search object
+		String[] statechoices = search.getStateMap().keySet().toArray(new String[0]); //define options for state choice jcombobox
+		String[] testchoices = {"N/A"}; //default jcombobox options
+		stateselect = new JComboBox<String>(statechoices); //add states to state jcombobox
 		stateselect.addItem("Choose a state");
-		stateselect.setSelectedIndex(stateselect.getItemCount() - 1);
+		stateselect.setSelectedIndex(stateselect.getItemCount() - 1); //sets the default selected item to "Choose a state"
 		areaselect = new JComboBox<String>(testchoices);
 		subareaselect = new JComboBox<String>(testchoices);
 		topicselect = new JComboBox<String>(testchoices);
 		categoryselect = new JComboBox<String>(testchoices);
+		
 		/*
-		areaselect.addActionListener(new AbstractAction("areaselect") {
+		 * listener for the area jcombobox, triggered whenever a change to the state of the areaselect object occurs
+		 * if the areaselect is not empty and the item selected is not N/A, then set the area of the search to the selected
+		 * area and if applicable, execute the updateSubAreas method
+		 */
+		ItemListener arealistener = new ItemListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (areaselect.getSelectedItem() == "N/A") {
-					//set a topic for the search without any specific area
-				} else {
-					System.out.println("Selected Item: " + (String)areaselect.getSelectedItem());
-					search.setArea((String)areaselect.getSelectedItem());
-					System.out.println("Search Area: " + search.getArea());
-					if (search.setSubAreaMap()) {
-						updateSubAreas();
+			public void itemStateChanged(ItemEvent e) {
+				if (areaselect.getItemCount() != 0) {
+					if (!areaselect.getSelectedItem().toString().equals("N/A")) {
+						String s = (String) areaselect.getSelectedItem();
+						System.out.println(s);
+						search.setArea(s);
+						if (search.setSubAreaMap()) {
+							updateSubAreas();
+						}
 					}
-					//areaselect.removeAllItems();
-					//updateAreas();
 				}
+				
 			}
-		});
-		*/
+			
+		};
+		areaselect.addItemListener(arealistener);
+		
+		/*
+		 * listener for the subareaselect object, if subareaselect is not empty and not set to "N/A" then
+		 * set the search subarea to the selected subarea 
+		 */
+		ItemListener subarealistener = new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (subareaselect.getItemCount() != 0) {
+					if (!subareaselect.getSelectedItem().toString().equals("N/A")) {
+						String s = (String) subareaselect.getSelectedItem();
+						System.out.println(s);
+						search.setSubArea(s);
+					}
+				}
+				
+			}
+			
+		};
+		subareaselect.addItemListener(subarealistener);
+		
+		/*
+		 * listener for the topic combobox, if the topicselect object is not empty and not set to "N/A" then
+		 * set the search topic to the selected topic and execute the update categories commmand
+		 */
+		ItemListener topiclistener = new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (topicselect.getItemCount() != 0) {
+					if (!topicselect.getSelectedItem().toString().equals("N/A")) {
+						String s = (String) topicselect.getSelectedItem();
+						System.out.println(s);
+						search.setTopic(s);
+						updateCategories();
+					}
+				}
+				
+			}
+			
+		};
+		topicselect.addItemListener(topiclistener);
+		
+		/*
+		 * itemListener for categoryselect, if categoryselect is not empty and is not "N/A" set the category to selected category 
+		 */
+		ItemListener categorylistener = new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (categoryselect.getItemCount() != 0) {
+					if (!categoryselect.getSelectedItem().toString().equals("N/A")) {
+						String s = (String) categoryselect.getSelectedItem();
+						System.out.println(s);
+						search.setCategory(s);
+						//updateCategories();
+					}
+				}
+				
+			}
+			
+		};
+		categoryselect.addItemListener(categorylistener);
+		
+		/*
+		 * action listener for stateselect, if "Choose a state" is selected, reset the state of the GUI, otherwise
+		 * reset the search and set the state to the new state selected and run the updateAreas method
+		 */
 		stateselect.addActionListener(new AbstractAction("test") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,16 +215,17 @@ public class MainGui implements ActionListener{
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		clicks++;
 		String labeltext = this.keywordfield.getText();
 		String[] guiTest = {labeltext};
-		String combotest = (String) this.stateselect.getSelectedItem();
-		System.out.println(combotest);
-		System.out.println(e.getSource().getClass());
-		System.out.println(e.getSource());
-		//Search s = SearchQuery.newSearch();
-		//SearchQuery q = new SearchQuery(guiTest);
-		//q.getSearch();
+		if (search.hasCategory) {
+			System.out.println("keyword: "  + labeltext + " search state: " + search.getState() + 
+					" search area: " + search.getArea() + " search subarea: " + search.getSubArea() + 
+					" search topic: " + search.getTopic() + " search category: " + search.getCategory()); 
+			SearchQuery q = new SearchQuery(guiTest,search);
+			q.getSearch();
+		} else {
+			System.out.println("incomplete search");
+		}
         //label.setText(labeltext);
 		
 		
@@ -211,14 +289,17 @@ public class MainGui implements ActionListener{
 	}
 	
 	protected void updateCategories() {
-		String topic = (String) topicselect.getSelectedItem();
-		search.setTopic(topic);
 		if (search.setCategoryMap() == false) {
 			topicselect = new JComboBox<String>(new String[]{"N/A"});
+			System.out.println("setCategoryMap failed");
 		} else {
 			search.setCategoryMap();
+			categoryselect.removeAllItems();
 			String[] categorychoices = search.getCategoryMap().keySet().toArray(new String[0]);
-			categoryselect = new JComboBox<String>(categorychoices);
+			for (String s : categorychoices) {
+				System.out.println(s);
+				categoryselect.addItem(s);
+			}
 		}
 	}
 	

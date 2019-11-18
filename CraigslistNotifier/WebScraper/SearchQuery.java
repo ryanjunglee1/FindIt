@@ -34,10 +34,10 @@ public class SearchQuery {
 	 * @param String[] keywords are the keywords to be searched for Items
 	 * @param Search search is the default search that includes required parameters like area, subarea, and topic before keywords
 	 */
-	public SearchQuery(String[] keywords) {
-		//this.search = search;
+	public SearchQuery(String[] keywords, Search search) {
+		this.search = search;
 		this.searchKeywordsPositive = keywords;
-		this.search = new Search();
+		//this.search = new Search();
 		Scanner scan = new Scanner(System.in);
 		scraper = new WebScraper(search, scan);
 	}
@@ -69,8 +69,25 @@ public class SearchQuery {
 			for (Element resultrow : resultrows) {
 				itemURL.add(resultrow.children().get(0).attributes().get("href"));
 			}
+			ArrayList<Item> itemarraylist = new ArrayList<Item>();
 			for (String s : itemURL) {
-				System.out.println(s);
+				//System.out.println(s);
+				try {
+					if (!s.isEmpty()) {
+						System.out.println("Item URL: " + s);
+						Item item = new Item(s);
+						//itemarraylist.add(new Item(s));
+					}
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			for (Item item : itemarraylist) {
+				System.out.println(item);
 			}
 		}
 		
