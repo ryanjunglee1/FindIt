@@ -20,7 +20,7 @@ public class WebScraper {
 	public WebScraper(Search search, Scanner scan) {
 		this.search = search;
 		this.scan = scan;
-		initialize(scan);
+		//initialize(scan);
 
 		try {
 			String subArea = "";

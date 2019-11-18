@@ -125,6 +125,9 @@ public class Search {
 					Attributes myAttributes = item.attributes();
 					subAreaMap.put(myAttributes.get("title"), item.html());
 				}
+			} else {
+				hasSubArea = false;
+				subAreaMap.clear();
 			}
 		}
 		catch (IOException e) {
