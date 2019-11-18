@@ -67,7 +67,9 @@ public class MainGui implements ActionListener{
 					System.out.println("Selected Item: " + (String)areaselect.getSelectedItem());
 					search.setArea((String)areaselect.getSelectedItem());
 					System.out.println("Search Area: " + search.getArea());
-					System.out.println("setSubAreaMap success: " + search.setSubAreaMap());
+					if (search.setSubAreaMap()) {
+						updateSubAreas();
+					}
 					//areaselect.removeAllItems();
 					//updateAreas();
 				}
@@ -94,6 +96,8 @@ public class MainGui implements ActionListener{
 					System.out.println("Search state: " + search.getState());
 					System.out.println("setAreaMap success: " + search.setAreaMap());
 					areaselect.removeAllItems();
+					subareaselect.removeAllItems();
+					subareaselect.addItem("N/A");
 					updateAreas();
 				}
 			}
@@ -152,8 +156,6 @@ public class MainGui implements ActionListener{
 	protected void updateAreas() {
 		if (search.setAreaMap() == false) {
 			areaselect.addItem("N/A");
-			search = new Search();
-			search.setState((String) stateselect.getSelectedItem());
 			System.out.println("No areas, Search state: " + search.getState());
 		} else {
 			areaselect.removeAllItems();
@@ -179,6 +181,14 @@ public class MainGui implements ActionListener{
 			subareaselect.removeAllItems();
 			subareaselect.addItem("N/A");
 		}
+		search.setTopicMap();
+		String[] topicchoices = search.getTopicMap().keySet().toArray(new String[0]);
+		topicselect.removeAllItems();
+		for (String topic : topicchoices) {
+			//System.out.println(topic);
+			System.out.println(topic);
+			topicselect.addItem(topic);
+		}
 	}
 	
 	protected void updateSubAreas() {
@@ -190,8 +200,12 @@ public class MainGui implements ActionListener{
 		System.out.println("Choose from a list of sub areas for: " + search.getState() + " " + search.getArea());
 		for (String subArea: subareachoices) {
 			System.out.print(subArea + "     ");
-			subareaselect.addItem(subArea);
+			if (!subArea.contentEquals(""))
+				subareaselect.addItem(subArea);
 		}
+		subareaselect.setSelectedIndex(0);
+		search.setSubArea(subareaselect.getSelectedItem().toString());
+		
 		//search.setSubArea(scan.nextLine());
 		
 	}

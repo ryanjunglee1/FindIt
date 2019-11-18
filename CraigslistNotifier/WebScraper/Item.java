@@ -7,6 +7,7 @@ import org.jsoup.nodes.Attributes;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.time.LocalTime;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
