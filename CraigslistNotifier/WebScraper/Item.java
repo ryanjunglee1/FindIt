@@ -7,6 +7,7 @@ import org.jsoup.nodes.Attributes;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URI;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -17,6 +18,7 @@ public class Item {
 	protected float itemPrice;
 	protected String dateTimePosted,dateTimeUpdated;
 	protected String itemURL; //change later when URL class is defined
+	protected URI itemURI;
 	protected ArrayList<String> itemImages; // change later to arraylist of URL 
 	protected Document website;
 	
@@ -25,6 +27,7 @@ public class Item {
 		this.website = Jsoup.connect(itemURL).get();
 		this.itemName = website.getElementById("titletextonly").html();
 		this.description = website.getElementById("postingbody").html();
+		this.itemURI = URI.create(this.itemURL);
 		/*
 		Element contact = website.getElementsByClass("mailapp").first();
 		this.contactInfo = contact.html();

@@ -1,13 +1,19 @@
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.net.URI;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /*
  * This class is used to contain an arrayList of items , the SearchQuery used to get those items, and update methods
@@ -31,15 +37,19 @@ public class SearchResult {
 	private JLabel label = new JLabel("Test");
 	private JTable table;
 	private JScrollPane scrollpane;
-	private String[] columnNames = {"Item Name", "Item Price"};
+	private String[] columnNames = {"Item Name", "Item Price", "button"};
 	
 	//initialize the searchresult gui with the list of items provided by searchquery
 	public SearchResult(ArrayList<Item> results, String title) {
 		this.itemList = results;
 		this.lastUpdated = LocalTime.now();
 		table = new JTable(makeData(), columnNames);
+		//table.setModel(new ItemTableModel());
+		table.setDefaultEditor(Object.class, null);
 		scrollpane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
+		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
+		//table.getColumn("button").setCellRenderer(buttonRenderer);
 		panel.add(label);
 		panel.add(scrollpane);
 		frame.add(panel);
@@ -48,7 +58,7 @@ public class SearchResult {
         frame.setSize(500, 500);
         //frame.pack();
         frame.setVisible(true);
-		//this.query = q;
+		
 	}
 	
 	public void add(Item i) {
@@ -64,12 +74,42 @@ public class SearchResult {
 	}
 	
 	public Object[][] makeData() {
-		Object[][] data = new Object[this.itemList.size()][2];
+		Object[][] data = new Object[this.itemList.size()][3];
 		for (int i = 0; i < this.itemList.size(); i++) {
 			Item it = this.itemList.get(i);
 			data[i][0] = it.itemName;
-			data[i][1] = it.itemPrice;
+			data[i][1] = "$" + it.itemPrice;
+			data[i][2] = new JButton();
 		}
 		return data;
 	}
+	
+	protected static boolean openWebpage(URI uri) {
+	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+	        try {
+	            desktop.browse(uri);
+	            return true;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return false;
+	}
+
 }
+/*
+ * the next block of code defines classes required to properly render the table onto the GUI
+ */
+
+class JTableButtonRenderer implements TableCellRenderer {        
+    @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JButton button = (JButton)value;
+        return button;  
+    }
+}
+
+
+
+
+
