@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -42,14 +44,16 @@ public class SearchResult {
 	//initialize the searchresult gui with the list of items provided by searchquery
 	public SearchResult(ArrayList<Item> results, String title) {
 		this.itemList = results;
+		this.resultSize = this.itemList.size();
 		this.lastUpdated = LocalTime.now();
 		table = new JTable(makeData(), columnNames);
-		//table.setModel(new ItemTableModel());
-		table.setDefaultEditor(Object.class, null);
+		table.setModel(new ItemTableModel(this));
+		table.addMouseListener(new JTableButtonMouseListener(this.table));
+		//table.setDefaultEditor(Object.class, null);
 		scrollpane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-		//table.getColumn("button").setCellRenderer(buttonRenderer);
+		table.getColumn("button").setCellRenderer(buttonRenderer);
 		panel.add(label);
 		panel.add(scrollpane);
 		frame.add(panel);
@@ -63,6 +67,7 @@ public class SearchResult {
 	
 	public void add(Item i) {
 		this.itemList.add(i);
+		this.resultSize++;
 	}
 	
 	public void printItems() {
@@ -96,18 +101,52 @@ public class SearchResult {
 	    }
 	    return false;
 	}
+	
+	
+	private static class JTableButtonRenderer implements TableCellRenderer {        
+	    @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	        JButton button = (JButton)value;
+	        //button.addMouseListener(new JTableButtonMouseListener(table));
+	        return button;  
+	    }
+	}
 
+
+	public JTable getTable() {
+		// TODO Auto-generated method stub
+		return this.table;
+	}
+	
+	private static class JTableButtonMouseListener extends MouseAdapter {
+        private final JTable table;
+
+        public JTableButtonMouseListener(JTable table) {
+            this.table = table;
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            int column = table.getColumnModel().getColumnIndexAtX(e.getX()); // get the coloum of the button
+            int row    = e.getY()/table.getRowHeight(); //get the row of the button
+
+                    /*Checking the row or column is valid or not*/
+            if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
+                Object value = table.getValueAt(row, column);
+                if (value instanceof JButton) {
+                    ((JButton)value).doClick();
+                }
+            }
+        }
+    }
+	
+	public Item getItem(int i) {
+		return this.itemList.get(i);
+	}
 }
 /*
  * the next block of code defines classes required to properly render the table onto the GUI
  */
 
-class JTableButtonRenderer implements TableCellRenderer {        
-    @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        JButton button = (JButton)value;
-        return button;  
-    }
-}
+
 
 
 

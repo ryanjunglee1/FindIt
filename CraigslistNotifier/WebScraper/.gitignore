@@ -21,3 +21,6 @@
 /JTableButtonRenderer.class
 /ItemTableModel.class
 /ItemTableModel$1.class
+/SearchResult$JTableButtonRenderer.class
+/ItemTableModel$JTableButtonMouseListener.class
+/SearchResult$JTableButtonMouseListener.class

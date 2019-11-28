@@ -5,9 +5,11 @@ import org.jsoup.select.Elements;
 import org.jsoup.nodes.Attributes;
 
 import java.util.ArrayList;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -62,5 +64,18 @@ public class Item {
 	@Override
 	public String toString() {
 		return this.itemName + " $" + this.itemPrice;
+	}
+	
+	public void openPage() {
+		if (!this.itemURI.equals(null)) {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			    try {
+					Desktop.getDesktop().browse(this.itemURI);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
