@@ -50,8 +50,9 @@ public class SearchQuery {
 		//Block of code that simulates webscraper returning an arraylist of items based on required conditions
 		String baseURL = scraper.website.location();
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
+		ArrayList<Item> itemarraylist = new ArrayList<Item>();
 		for (int i = 0; i < keywordURL.length; i++) {
-			keywordURL[i] = baseURL + "?query=" + this.searchKeywordsPositive[i];
+			keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i];
 			System.out.println(keywordURL[i]);
 		}
 		ArrayList<String> itemURL = new ArrayList<String>();
@@ -69,7 +70,6 @@ public class SearchQuery {
 			for (Element resultrow : resultrows) {
 				itemURL.add(resultrow.children().get(0).attributes().get("href"));
 			}
-			ArrayList<Item> itemarraylist = new ArrayList<Item>();
 			for (String s : itemURL) {
 				//System.out.println(s);
 				try {
@@ -86,43 +86,10 @@ public class SearchQuery {
 					e.printStackTrace();
 				}
 			}
-			for (Item item : itemarraylist) {
-				System.out.println(item);
-			}
 		}
-		
-		/*
-		ArrayList<Item> testList = new ArrayList<Item>();
-		Item testItem = new Item("Fridge","brand new fridge");
-		Item testItem2 = new Item("TV","slightly used TV");
-		Item testItem3 = new Item("Motorcycle","For parts only broken motorcycle");
-		testList.add(testItem);
-		testList.add(testItem2);
-		testList.add(testItem3);
-		
-		//
-		
-		//empty searchresult created with this as the query
-		SearchResult result = new SearchResult(this);
-		
-		/*
-		 * goes through the simulated webscraper list return and adds only 
-		 * the items that fit the keyword query to the result
-		 * currently only supports checking item name and description for any of the keywords
-		 
-		Iterator listIterator = testList.iterator();
-		while (listIterator.hasNext()) {
-			Item i = (Item) listIterator.next();
-			for (String s : this.searchKeywordsPositive) {
-				if (i.itemName.contains(s) || i.description.contains(s)) {
-					result.add(i);
-				}
-			}
-		}
-		result.printItems();
-		return result;
-		*/
-		return null;
+		SearchResult results = new SearchResult(itemarraylist, this.searchKeywordsPositive[0]);
+		results.printItems();
+		return results;
 	}
 	
 	

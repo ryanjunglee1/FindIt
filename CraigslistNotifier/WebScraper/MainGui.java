@@ -119,6 +119,7 @@ public class MainGui implements ActionListener{
 						String s = (String) topicselect.getSelectedItem();
 						System.out.println(s);
 						search.setTopic(s);
+						categoryselect.removeAllItems();
 						updateCategories();
 					}
 				}
