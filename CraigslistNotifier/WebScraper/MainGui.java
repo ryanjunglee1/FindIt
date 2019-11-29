@@ -23,6 +23,7 @@ import javax.swing.JTextField;
  * @version 1.0
  */
 public class MainGui implements ActionListener{
+	
 	//Define all GUI elements
 	private JFrame frame = new JFrame();
 	private JPanel basicsearch = new JPanel();
