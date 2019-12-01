@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  * The main GUI that accepts a search parameter (i.e., TV, camera, etc.) from a user and creates a searchQuery
  * for the desired item on Craigslist. Then software will display the search results in a simple yet meaningful
  * way to the user. 
- * @author Original: Arti Shala, Updated to JavaFX: Weezha Yahyapoor
+ * @author Updated to JavaFX: Weezha Yahyapoor, Original: Arti Shala and Ryan Lee 
  * @version 1.0
  */
 public class UpdatedGUI extends Application {
@@ -65,7 +65,7 @@ public class UpdatedGUI extends Application {
 		 */
 		stateselect.setPrefWidth(150);
 		stateselect.setValue("Choose state");
-		stateselect.getItems().add("Choose a state");
+		//stateselect.getItems().add("Choose a state");
 		ObservableList<String> items = FXCollections.observableArrayList(statechoices);
 		stateselect.getItems().addAll(items);
 		
@@ -197,7 +197,7 @@ public class UpdatedGUI extends Application {
 					String s = topicselect.getSelectionModel().getSelectedItem().toString();
 					System.out.println(s);
 					search.setTopic(s);
-					categoryselect.getItems().clear(); //.removeAllItems();
+					categoryselect.getItems().clear();
 					updateCategories();
 				}
 			}
@@ -228,32 +228,17 @@ public class UpdatedGUI extends Application {
 		 * reset the search and set the state to the new state selected and run the updateAreas method
 		 */
 		stateselect.setOnAction((e) -> {
-			
-			if (stateselect.getSelectionModel().getSelectedItem().toString().contentEquals("Choose a state")) {
-				
-				areaselect.getItems().clear();
-				areaselect.setValue("N/A");
-				subareaselect.getItems().clear(); 
-				subareaselect.setValue("N/A");
-				topicselect.getItems().clear(); 
-				topicselect.setValue("N/A");
-				categoryselect.getItems().clear(); 
-				categoryselect.setValue("N/A");
-				search = new Search();
-				
-			} else {
-				
-				System.out.println(stateselect.getSelectionModel().getSelectedItem().toString());
-				search = new Search();
-				search.setState(stateselect.getSelectionModel().getSelectedItem().toString());
-				System.out.println("Search state: " + search.getState());
-				System.out.println("setAreaMap success: " + search.setAreaMap());
-				areaselect.getItems().clear(); 
-				subareaselect.getItems().clear(); 
-				subareaselect.setValue("N/A");
-				updateAreas();
-			}
-			
+					
+			System.out.println(stateselect.getSelectionModel().getSelectedItem().toString());
+			search = new Search();
+			search.setState(stateselect.getSelectionModel().getSelectedItem().toString());
+			System.out.println("Search state: " + search.getState());
+			System.out.println("setAreaMap success: " + search.setAreaMap());
+			areaselect.getItems().clear(); 
+			subareaselect.getItems().clear(); 
+			subareaselect.setValue("N/A");
+			updateAreas();
+	
 		});
 		
 		/*
