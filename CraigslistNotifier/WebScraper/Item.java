@@ -4,6 +4,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Attributes;
 
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+
 import java.util.ArrayList;
 import java.awt.Desktop;
 import java.io.IOException;
@@ -14,7 +17,12 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
-//Class that represents an item in craigslist
+/**
+ * Class that represents an item in craigslist
+ * @author Ryan Lee, Arti Shala
+ *
+ */
+
 public class Item {
 	protected String itemName, make, model, description, contactInfo, contactMailLink, location, datePosted, dateUpdated;
 	protected float itemPrice;
@@ -26,6 +34,16 @@ public class Item {
 	
 	public Item(String itemURL) throws NumberFormatException, IOException {
 		this.itemURL = itemURL;
+		/*System.setProperty("webdriver.chrome.driver", "C:\\Users\\ryanm\\Documents\\GitHub\\CraigslistNotifier\\CraigslistNotifier\\Chrome Driver\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		driver.get(itemURL);
+		driver.findElement(By.cssSelector(".reply-button.js-only")).click();
+		String html = "";
+		for (WebElement element: driver.findElements(By.cssSelector("*"))) {
+			html += element.getText();
+		}
+		this.website = Jsoup.parse(html);
+		*/
 		this.website = Jsoup.connect(itemURL).get();
 		this.itemName = website.getElementById("titletextonly").html();
 		this.description = website.getElementById("postingbody").html();
@@ -54,6 +72,7 @@ public class Item {
 			itemImages.add(image.children().first().attributes().get("src"));
 		}
 		*/
+		//driver.close();
 	}
 	
 	public Item(String name, String description) {

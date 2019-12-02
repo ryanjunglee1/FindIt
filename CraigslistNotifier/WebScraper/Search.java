@@ -10,12 +10,26 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+/**
+ * Makes a search object that contains all the parameters of the search
+ * @author Ryan Lee
+ *
+ */
+
 public class Search {
 	protected Document website;
 	protected HashMap<String, String> stateMap, areaMap, subAreaMap, topicMap, categoryMap;
 	protected String state, area, subArea, topic, category;
 	protected boolean hasArea, hasSubArea, hasCategory;
-
+	
+	/**
+	 * Initializes the search parameters along with the HashMap of the available states
+	 * @param state
+	 * @param area
+	 * @param subArea
+	 * @param topic
+	 * @param category
+	 */
 	public Search(String state, String area, String subArea, String topic, String category) {
 		this.state = state;
 		this.area = area;
@@ -43,11 +57,11 @@ public class Search {
 			System.out.println("Website Not Found");
 		}
 	}
-
+	
 	public Search() {
 		this("", "", "", "", "");
 	}
-
+	
 	public Document getWebsite() { return website; }
 
 	public void setWebsite(Document website) { this.website = website; }
@@ -87,7 +101,11 @@ public class Search {
 	public void setStateMap(HashMap<String, String> states) { this.stateMap = stateMap; }
 
 	public HashMap<String, String> getAreaMap() { return areaMap; }
-
+	
+	/**
+	 * Sets areaMap according to the chosen state
+	 * @return true if areas exist for the state, false if they don't
+	 */
 	public boolean setAreaMap() {
 		try {
 			website = Jsoup.connect(this.stateMap.get(state)).get();
@@ -110,6 +128,10 @@ public class Search {
 
 	public HashMap<String, String> getSubAreaMap() { return subAreaMap; }
 
+	/**
+	 * Sets the HashMap of the sub area according to the chosen area (or state if the area doesn't exist)
+	 * @return true if sub areas exist, false if they don't
+	 */
 	public boolean setSubAreaMap() {
 		try {
 			if (hasArea)
@@ -138,7 +160,10 @@ public class Search {
 	}
 
 	public HashMap<String, String> getTopicMap() { return topicMap; }
-
+	
+	/**
+	 * Sets the HashMap of the topics
+	 */
 	public void setTopicMap() {
 		Elements topicItems = website.getElementById("catAbb").getElementsByAttribute("value");
 		for (Element item: topicItems) {
@@ -156,6 +181,10 @@ public class Search {
 
 	public HashMap<String, String> getCategoryMap() { return categoryMap; }
 
+	/**
+	 * Sets the HashMap of the Categories
+	 * @return true if categories exist, false if they don't
+	 */
 	public boolean setCategoryMap() {
 		System.out.println(getTopicMap().get(topic));
 		Elements categoryItems = website.getElementById(getTopicMap().get(topic)).getElementsByClass("cats").first().children();
