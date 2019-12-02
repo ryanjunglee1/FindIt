@@ -179,4 +179,6 @@ public class Search {
 	public boolean hasArea() { return hasArea; }
 
 	public boolean hasSubArea() { return hasSubArea; }
+	
+	public boolean hasCategory() { return hasCategory; }
 }
