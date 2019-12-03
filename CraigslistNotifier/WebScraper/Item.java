@@ -10,19 +10,22 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
 //Class that represents an item in craigslist
 public class Item {
-	protected String itemName, make, model, description, contactInfo, contactMailLink, location, datePosted, dateUpdated;
+	protected String itemName, make, model, description, location, datePosted, dateUpdated;
 	protected float itemPrice;
-	protected String dateTimePosted,dateTimeUpdated;
+	protected LocalDateTime dateTimePosted,dateTimeUpdated;
 	protected String itemURL; //change later when URL class is defined
 	protected URI itemURI;
-	protected ArrayList<String> itemImages; // change later to arraylist of URL 
+	protected ArrayList<String> itemThumbs, itemPicsFull; //change later to arraylist of URL 
+	protected String fullsizeimg;
 	protected Document website;
+	protected boolean hasImages;
 	
 	public Item(String itemURL) throws NumberFormatException, IOException {
 		this.itemURL = itemURL;
@@ -30,30 +33,80 @@ public class Item {
 		this.itemName = website.getElementById("titletextonly").html();
 		this.description = website.getElementById("postingbody").html();
 		this.itemURI = URI.create(this.itemURL);
-		/*
-		Element contact = website.getElementsByClass("mailapp").first();
-		this.contactInfo = contact.html();
-		this.contactMailLink = contact.attributes().get("href");
-		this.contactMailLink = this.contactMailLink.substring(0, this.contactMailLink.length() > 100 ? 100 : this.contactMailLink.length());
-		*/
 		try {
-		this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
+			this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
 		} catch (NullPointerException e) {
 			this.itemPrice = 0.00f;
 		}
-		/*
-		this.location = website.getElementsByClass("postingtitletext").first().html();
-		this.location = this.location.substring(this.location.indexOf("("), this.location.indexOf(")") + 1);
 		
-		Elements times = website.getElementsByClass("date timeago");
-		this.dateTimePosted = times.get(1).attributes().get("title");
-		this.dateTimeUpdated = times.get(2).attributes().get("title");
-		
-		Elements images = website.getElementById("thumbs").children();
-		for (Element image: images) {
-			itemImages.add(image.children().first().attributes().get("src"));
+		try {
+			String city = website.getElementsByClass("postingtitle").first().getElementsByTag("small").first().html().replace("(", "");
+			city = city.substring(0, city.length() - 1);
+			this.location = city + " " +
+					website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
+			System.out.println(this.location);
+		} catch (NullPointerException e) {
+			try {
+				String city = website.getElementsByClass("postingtitle").first().getElementsByTag("small").first().html().replace("(", "");
+				city = city.substring(0, city.length() - 1);
+				this.location = city;
+				System.out.println(this.location);
+			} catch (NullPointerException d) {
+				try {
+					this.location = website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
+					System.out.println(this.location);
+				} catch (NullPointerException c) {
+					this.location = null;
+					System.out.println("crumb area not found");
+				}
+			}
+			
 		}
-		*/
+		
+		
+		
+		Elements times = website.getElementsByClass("postinginfos").first().getElementsByTag("time");
+		try {
+			String rawtimepost = times.first().html();
+			rawtimepost = rawtimepost.substring(0,10) + "T" + rawtimepost.substring(11) + ":00";
+			String rawtimeupdate = times.first().html();
+			rawtimeupdate = rawtimeupdate.substring(0,10) + "T" + rawtimeupdate.substring(11) + ":00";
+			this.dateTimePosted = LocalDateTime.parse(rawtimepost);
+			this.dateTimeUpdated = LocalDateTime.parse(rawtimeupdate);
+			System.out.println(this.dateTimePosted.toString() + " " + this.dateTimeUpdated);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			//System.out.println(website.toString());
+			Elements images = website.getElementsByTag("img");
+			this.itemThumbs = new ArrayList<String>();
+			this.fullsizeimg = images.get(0).attr("src");
+			for (int i = 0; i < images.size(); i++) {
+				if (i != 0 && !images.get(i).equals(null)) {
+					try {
+						String imgtag = images.get(i).attr("src");
+						this.itemThumbs.add(imgtag);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			System.out.println("Fullsize: " + this.fullsizeimg);
+			for (String s : this.itemThumbs) {
+				System.out.println(s);
+			}
+			this.hasImages = true;
+			
+		} catch (NullPointerException e) {
+			System.out.println("no images, null pointer");
+			this.hasImages = false;
+		} catch (IndexOutOfBoundsException o) {
+			System.out.println("no images, out of bounds");
+			this.hasImages = false;
+		}
+		
 	}
 	
 	public Item(String name, String description) {
