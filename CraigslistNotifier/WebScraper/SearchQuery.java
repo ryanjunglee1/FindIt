@@ -76,7 +76,7 @@ public class SearchQuery {
 					if (!s.isEmpty()) {
 						Item item = new Item(s);
 						itemarraylist.add(item);
-						System.out.println(item);
+						System.out.println(item + "\n");
 					}
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
@@ -88,7 +88,7 @@ public class SearchQuery {
 			}
 		}
 		SearchResult results = new SearchResult(itemarraylist, this.searchKeywordsPositive[0]);
-		results.printItems();
+		//results.printItems();
 		return results;
 	}
 	
