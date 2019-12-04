@@ -66,6 +66,7 @@ public class UpdatedGUI extends Application {
 		stateselect.setPrefWidth(150);
 		stateselect.setValue("Choose state");
 		//stateselect.getItems().add("Choose a state");
+		Sorts.quickSort(statechoices, 0, statechoices.length - 1);
 		ObservableList<String> items = FXCollections.observableArrayList(statechoices);
 		stateselect.getItems().addAll(items);
 		
@@ -277,6 +278,7 @@ public class UpdatedGUI extends Application {
 			System.out.println("State has areas, state: " + search.getState());
 			System.out.println("Has areas for state: " + search.setAreaMap() + " Areas: ");
 			String[] areachoices = search.getAreaMap().keySet().toArray(new String[0]);
+			Sorts.quickSort(areachoices, 0, areachoices.length - 1);
 			for (String s : areachoices) {
 				System.out.println(s);
 				if (!s.equals("")) {
@@ -300,6 +302,7 @@ public class UpdatedGUI extends Application {
 		}
 		search.setTopicMap();
 		String[] topicchoices = search.getTopicMap().keySet().toArray(new String[0]);
+		Sorts.quickSort(topicchoices, 0, topicchoices.length - 1);
 		topicselect.getItems().clear(); 
 		
 		for (String topic : topicchoices) {
@@ -314,6 +317,7 @@ public class UpdatedGUI extends Application {
 		System.out.println();
 		System.out.println("Has area: " + search.hasArea() + " Search area: " + area);
 		String[] subareachoices = search.getSubAreaMap().keySet().toArray(new String[0]);
+		Sorts.quickSort(subareachoices, 0, subareachoices.length - 1);
 		subareaselect.getItems().clear(); 
 		System.out.println("Choose from a list of sub areas for: " + search.getState() + " " + search.getArea());
 		for (String subArea: subareachoices) {
@@ -338,6 +342,7 @@ public class UpdatedGUI extends Application {
 			search.setCategoryMap();
 			categoryselect.getItems().clear(); 
 			String[] categorychoices = search.getCategoryMap().keySet().toArray(new String[0]);
+			Sorts.quickSort(categorychoices, 0, categorychoices.length - 1);
 			for (String s : categorychoices) {
 				System.out.println(s);
 				categoryselect.getItems().add(s); 
