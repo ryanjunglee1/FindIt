@@ -177,20 +177,35 @@ public class SearchResult {
 		this.lastUpdated = LocalDateTime.now();
 		System.out.println("Last updated: " + this.lastUpdated.toString());
 		for (Item  i : this.itemList) {
-			if (i.dateTimePosted.isAfter(originalUpdateTime) || i.dateTimeUpdated.isAfter(originalUpdateTime))
+			boolean foundequal = false;
+			for (Item j : originalList) {
+				if (i.equals(j))
+					foundequal = true;
+			}
+			if (!foundequal)
 				newItems.add(i);
-				//System.out.println(i.toString());
-				//MailSender sender = new MailSender("artishala0@gmail.com", "Test", i.toString());
-		    	//System.out.println(sender.sendMail());
 		}
 		System.out.println("--------NEW ITEMS----------");
+		String emailsubject = "Your " + this.query.search.getState() + " " + this.query.search.getCategory() + " search has new items!";
+		String emailbody = "";
 		for (Item i : newItems) {
 			System.out.println("-----------");
 			System.out.println("Item: " + i.toString() + " post date: " + i.dateTimePosted + " update date: " + i.dateTimeUpdated);
-			System.out.println("original time: " + originalUpdateTime);
+			System.out.println("original time: " + originalUpdateTime.toString());
 			System.out.println("-----------");
+			try {
+			emailbody = emailbody + i.itemName + " $" + i.itemPrice + "\n Posted: " + i.dateTimePosted.toString() + "\n" +
+					i.itemURL + "\n" + "\n";
+			} catch (NullPointerException z) {
+				z.printStackTrace();
+			}
 			// TODO Send email containing new items and fix new item condition
 		}
+		if (!newItems.isEmpty()) {
+	    	MailSender sender = new MailSender(updateEmail, emailsubject, emailbody);
+	    	System.out.println("Email sent: " + sender.sendMail());
+		}
+			
 		//table = new JTable(makeData(), columnNames);
 		//table.setModel(new ItemTableModel(this));
 		

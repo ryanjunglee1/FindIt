@@ -139,4 +139,10 @@ public class Item {
 			}
 		}
 	}
+	
+	public boolean equals(Item i) {
+		if (this.postID.contentEquals(i.postID))
+			return true;
+		return false;
+	}
 }
