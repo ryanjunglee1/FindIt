@@ -15,6 +15,7 @@
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/javafx/lib/javafx.swing.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/javafx/lib/javafx.web.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/javafx/lib/javafx-swt.jar"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/libs/byte-buddy-1.8.15.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/libs/commons-exec-1.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/libs/guava-25.0-jre.jar"/>
@@ -24,5 +25,9 @@
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/client-combined-3.141.59-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/javax.mail.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/activation-1.1.1.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/javax.mail.jar"/>
+>>>>>>> master
 	<classpathentry kind="output" path=""/>
 </classpath>
