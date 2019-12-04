@@ -34,8 +34,10 @@ public class Item {
 	protected String fullsizeimg;
 	protected Document website;
 	protected boolean hasImages;
+	protected boolean isNull;
 	
 	public Item(String itemURL) throws NumberFormatException, IOException {
+<<<<<<< HEAD
 		this.itemURL = itemURL;
 		/*System.setProperty("webdriver.chrome.driver", "C:\\Users\\ryanm\\Documents\\GitHub\\CraigslistNotifier\\CraigslistNotifier\\Chrome Driver\\chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
@@ -51,84 +53,100 @@ public class Item {
 		this.itemName = website.getElementById("titletextonly").html();
 		this.description = website.getElementById("postingbody").html();
 		this.itemURI = URI.create(this.itemURL);
+=======
+>>>>>>> master
 		try {
-			this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
-		} catch (NullPointerException e) {
-			this.itemPrice = 0.00f;
-		}
-		
-		try {
-			String city = website.getElementsByClass("postingtitle").first().getElementsByTag("small").first().html().replace("(", "");
-			city = city.substring(0, city.length() - 1);
-			this.location = city + " " +
-					website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
-			System.out.println(this.location);
-		} catch (NullPointerException e) {
+			this.itemURL = itemURL;
+			this.website = Jsoup.connect(itemURL).get();
+			this.itemName = website.getElementById("titletextonly").html();
+			this.description = website.getElementById("postingbody").html();
+			this.itemURI = URI.create(this.itemURL);
+			try {
+				this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
+			} catch (NullPointerException e) {
+				this.itemPrice = 0.00f;
+			}
+			
 			try {
 				String city = website.getElementsByClass("postingtitle").first().getElementsByTag("small").first().html().replace("(", "");
 				city = city.substring(0, city.length() - 1);
-				this.location = city;
+				this.location = city + " " +
+						website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
 				System.out.println(this.location);
-			} catch (NullPointerException d) {
+			} catch (NullPointerException e) {
 				try {
-					this.location = website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
+					String city = website.getElementsByClass("postingtitle").first().getElementsByTag("small").first().html().replace("(", "");
+					city = city.substring(0, city.length() - 1);
+					this.location = city;
 					System.out.println(this.location);
-				} catch (NullPointerException c) {
-					this.location = null;
-					System.out.println("crumb area not found");
-				}
-			}
-			
-		}
-		
-		
-		
-		Elements times = website.getElementsByClass("postinginfos").first().getElementsByTag("time");
-		try {
-			String rawtimepost = times.first().html();
-			rawtimepost = rawtimepost.substring(0,10) + "T" + rawtimepost.substring(11) + ":00";
-			String rawtimeupdate = times.first().html();
-			rawtimeupdate = rawtimeupdate.substring(0,10) + "T" + rawtimeupdate.substring(11) + ":00";
-			this.dateTimePosted = LocalDateTime.parse(rawtimepost);
-			this.dateTimeUpdated = LocalDateTime.parse(rawtimeupdate);
-			System.out.println(this.dateTimePosted.toString() + " " + this.dateTimeUpdated);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			//System.out.println(website.toString());
-			Elements images = website.getElementsByTag("img");
-			this.itemThumbs = new ArrayList<String>();
-			this.fullsizeimg = images.get(0).attr("src");
-			for (int i = 0; i < images.size(); i++) {
-				if (i != 0 && !images.get(i).equals(null)) {
+				} catch (NullPointerException d) {
 					try {
-						String imgtag = images.get(i).attr("src");
-						this.itemThumbs.add(imgtag);
-					} catch (Exception e) {
-						e.printStackTrace();
+						this.location = website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
+						System.out.println(this.location);
+					} catch (NullPointerException c) {
+						this.location = null;
+						System.out.println("crumb area not found");
 					}
 				}
+				
 			}
-			System.out.println("Fullsize: " + this.fullsizeimg);
-			for (String s : this.itemThumbs) {
-				System.out.println(s);
-			}
-			this.hasImages = true;
 			
-		} catch (NullPointerException e) {
-			System.out.println("no images, null pointer");
-			this.hasImages = false;
-		} catch (IndexOutOfBoundsException o) {
-			System.out.println("no images, out of bounds");
-			this.hasImages = false;
+			
+			
+			Elements times = website.getElementsByClass("postinginfos").first().getElementsByTag("time");
+			try {
+				String rawtimepost = times.first().html();
+				rawtimepost = rawtimepost.substring(0,10) + "T" + rawtimepost.substring(11) + ":00";
+				String rawtimeupdate = times.first().html();
+				rawtimeupdate = rawtimeupdate.substring(0,10) + "T" + rawtimeupdate.substring(11) + ":00";
+				this.dateTimePosted = LocalDateTime.parse(rawtimepost);
+				this.dateTimeUpdated = LocalDateTime.parse(rawtimeupdate);
+				System.out.println(this.dateTimePosted.toString() + " " + this.dateTimeUpdated);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				//System.out.println(website.toString());
+				Elements images = website.getElementsByTag("img");
+				this.itemThumbs = new ArrayList<String>();
+				this.fullsizeimg = images.get(0).attr("src");
+				for (int i = 0; i < images.size(); i++) {
+					if (i != 0 && !images.get(i).equals(null)) {
+						try {
+							String imgtag = images.get(i).attr("src");
+							this.itemThumbs.add(imgtag);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				System.out.println("Fullsize: " + this.fullsizeimg);
+				for (String s : this.itemThumbs) {
+					System.out.println(s);
+				}
+				this.hasImages = true;
+				
+			} catch (NullPointerException e) {
+				System.out.println("no images, null pointer");
+				this.hasImages = false;
+			} catch (IndexOutOfBoundsException o) {
+				System.out.println("no images, out of bounds");
+				this.hasImages = false;
+			}
+			isNull = false;
+		} catch (NullPointerException z) {
+			System.out.println("item deleted or expired");
+			isNull = true;
 		}
+<<<<<<< HEAD
 <<<<<<< HEAD
 		*/
 		//driver.close();
 =======
 		
+>>>>>>> master
+=======
 >>>>>>> master
 	}
 	
