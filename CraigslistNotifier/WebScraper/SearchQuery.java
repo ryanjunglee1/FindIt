@@ -47,7 +47,8 @@ public class SearchQuery {
 	 * @return a SearchResult object containing all the items that fit the search parameters
 	 */
 	public SearchResult getSearch(){
-		//Block of code that simulates webscraper returning an arraylist of items based on required conditions
+		
+		/*
 		String baseURL = scraper.website.location();
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
 		ArrayList<Item> itemarraylist = new ArrayList<Item>();
@@ -89,6 +90,8 @@ public class SearchQuery {
 				}
 			}
 		}
+		*/
+		ArrayList<Item> itemarraylist = updateSearch();
 		SearchResult results = new SearchResult(itemarraylist, this.searchKeywordsPositive[0], this);
 		//results.printItems();
 		return results;

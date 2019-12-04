@@ -7,9 +7,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
@@ -17,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,9 +43,11 @@ public class SearchResult {
 	protected ArrayList<Item> itemList;
 	protected int resultSize;
 	protected SearchQuery query;
-	protected LocalTime lastUpdated, updateInterval, nextUpdate;
+	protected int updateInterval;
+	protected LocalDateTime lastUpdated, nextUpdate;
 	protected boolean willUpdate;
 	protected String updateEmail;
+	int count = 0;
 	
 	//GUI elements
 	private JFrame frame = new JFrame();
@@ -50,7 +56,7 @@ public class SearchResult {
 	private JPanel container = new JPanel();
 	private JLabel label = new JLabel("Enter your email for notifications");
 	private JTextField email = new JTextField(20);
-	private JTextField updateIntervalField = new JTextField(5);
+	private JComboBox updateIntervalField = new JComboBox(new Object[] {"1","5","10","60","120","720","1440"});
 	private JLabel updateLabel1 = new JLabel("Check for updates every: ");
 	private JLabel updateLabel2 = new JLabel("Minutes");
 	private JButton updateButton = new JButton("Enable");
@@ -64,7 +70,7 @@ public class SearchResult {
 		//itemlist set by constructor args, JTable populated with makedata method of searchresult and tablemodel set with mouselistener
 		this.itemList = results;
 		this.resultSize = this.itemList.size();
-		this.lastUpdated = LocalTime.now();
+		this.lastUpdated = LocalDateTime.now();
 		table = new JTable(makeData(), columnNames);
 		table.setModel(new ItemTableModel(this));
 		table.addMouseListener(new JTableButtonMouseListener(this.table));
@@ -89,20 +95,41 @@ public class SearchResult {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Timer timer = new Timer();
 				if (willUpdate) {
 					willUpdate = false;
 					System.out.println("disabled");
 					updateButton.setBackground(Color.green);
 					updateButton.setText("Enable");
+					timer.cancel();
 				} else {
 					willUpdate = true;
 					String inputEmail = email.getText();
+					updateEmail = email.getText();
+					updateButton.setBackground(Color.red);
+					updateButton.setText("Disable");
+					System.out.println("enabled: " + updateEmail);
 					if (isValidEmail(inputEmail)) {
-						updateTable(query.updateSearch());
-						updateEmail = email.getText();
-						updateButton.setBackground(Color.red);
-						updateButton.setText("Disable");
-						System.out.println("enabled: " + updateEmail);
+						updateInterval = Integer.parseInt(updateIntervalField.getSelectedItem().toString());
+						System.out.println(updateInterval + " minute update interval");
+						
+						
+						timer.schedule( new TimerTask() {
+						    public void run() {
+						    	if (willUpdate == false) {
+						    		timer.cancel();
+						    		count = 0;
+						    		System.out.println("Updated " + count + " times");
+						    	} else {
+						    		System.out.println(updateInterval + " minutes have passed"); 
+						    		count++;
+						    		updateTable(query.updateSearch());
+						    		
+						    	}
+						    }
+						 }, 0, updateInterval * 60000);
+						
+						
 						
 					} else {
 						updateEmail = null;
@@ -138,6 +165,7 @@ public class SearchResult {
 	}
 	
 	public void updateTable(ArrayList<Item> items) {
+		ArrayList<Item> originalList = this.itemList;
 		this.itemList = items;
 		table.removeAll();
 		table.setModel(new ItemTableModel(this));
