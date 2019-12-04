@@ -15,5 +15,7 @@
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/javafx/lib/javafx.swing.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/javafx/lib/javafx.web.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/javafx/lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/javax.mail.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
