@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -34,12 +35,43 @@ public class SearchQuery {
 	 * @param String[] keywords are the keywords to be searched for Items
 	 * @param Search search is the default search that includes required parameters like area, subarea, and topic before keywords
 	 */
-	public SearchQuery(String[] keywords, Search search) {
+	public SearchQuery(String[] keywords, Options options, Search search) {
 		this.search = search;
 		this.searchKeywordsPositive = keywords;
 		//this.search = new Search();
 		Scanner scan = new Scanner(System.in);
 		scraper = new WebScraper(search, scan);
+		
+		if (options != null) {
+			HashMap<String, Boolean> checkBoxes = options.getCheckBoxes();
+			HashMap<String, String> types = options.getTypes();
+			minPrice = options.getMinPrice();
+			maxPrice = options.getMaxPrice();
+			if (checkBoxes != null) {
+				hasImage = checkBoxes.get("hasImages");
+				multipleImagesOnly = checkBoxes.get("multipleImagesOnly");
+				originalImagesOnly = checkBoxes.get("originalImagesOnly");
+				postedToday = checkBoxes.get("postedToday");
+				searchTitlesOnly = checkBoxes.get("searchTitlesOnly");
+				bundleDuplicates = checkBoxes.get("bundleDuplicates");
+				hideAllDuplicates = checkBoxes.get("hideAllDuplicates");
+				hasMakeModelOnly = checkBoxes.get("hasMakeModelOnly");
+				hasPhoneOnly = checkBoxes.get("hasPhoneOnly");
+				cryptoAccepted = checkBoxes.get("cryptoAccepted");
+				deliveryAvailable = checkBoxes.get("deliveryAvailable");
+			}
+			
+			if (types != null) {
+				sellerType = types.get("sellerType");
+				makeSearch = types.get("makeSearch");
+				modelSearch = types.get("modelSearch"); 
+				conditionSearch = types.get("conditionSearch");
+			}
+		}
+	}
+	
+	public SearchQuery(String[] keywords, Search search) {
+		this(keywords, null, search);
 	}
 	
 	/*
@@ -53,7 +85,7 @@ public class SearchQuery {
 		ArrayList<Item> itemarraylist = new ArrayList<Item>();
 		for (int i = 0; i < keywordURL.length; i++) {
 			keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i];
-			System.out.println(keywordURL[i]);
+			//System.out.println(keywordURL[i]);
 		}
 		ArrayList<String> itemURL = new ArrayList<String>();
 		Document[] documents = new Document[keywordURL.length];
@@ -75,8 +107,10 @@ public class SearchQuery {
 				try {
 					if (!s.isEmpty()) {
 						Item item = new Item(s);
-						itemarraylist.add(item);
-						System.out.println(item + "\n");
+						if (this.maxPrice >= this.minPrice && item.itemPrice >= this.minPrice && item.itemPrice <= this.maxPrice) {
+							itemarraylist.add(item);
+						}
+						//System.out.println(item + "\n");
 					}
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block

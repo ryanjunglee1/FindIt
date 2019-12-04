@@ -83,7 +83,8 @@ public class SearchResult {
 		for (int i = 0; i < this.itemList.size(); i++) {
 			Item it = this.itemList.get(i);
 			data[i][0] = it.itemName;
-			data[i][1] = "$" + it.itemPrice;
+			String myItemPrice = "" + it.itemPrice;
+			data[i][1] = "$" + (myItemPrice.indexOf('.') > myItemPrice.length() - 3 ? myItemPrice + "0" : myItemPrice);
 			data[i][2] = new JButton();
 		}
 		return data;

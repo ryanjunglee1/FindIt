@@ -93,9 +93,9 @@ public class Item {
 					}
 				}
 			}
-			System.out.println("Fullsize: " + this.fullsizeimg);
+			//System.out.println("Fullsize: " + this.fullsizeimg);
 			for (String s : this.itemThumbs) {
-				System.out.println(s);
+				//System.out.println(s);
 			}
 			this.hasImages = true;
 			
