@@ -27,6 +27,7 @@ public class Item {
 	protected Document website;
 	protected boolean hasImages;
 	protected boolean isNull;
+	protected String postID;
 	
 	public Item(String itemURL) throws NumberFormatException, IOException {
 		try {
@@ -66,7 +67,8 @@ public class Item {
 			}
 			
 			
-			
+			this.postID = website.getElementsByClass("postinginfos").first().getElementsByClass("postinginfo").first().html().replaceAll("[^\\d]","");
+			System.out.println(this.postID);
 			Elements times = website.getElementsByClass("postinginfos").first().getElementsByTag("time");
 			try {
 				String rawtimepost = times.first().html();

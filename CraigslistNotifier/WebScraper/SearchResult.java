@@ -189,7 +189,7 @@ public class SearchResult {
 			System.out.println("Item: " + i.toString() + " post date: " + i.dateTimePosted + " update date: " + i.dateTimeUpdated);
 			System.out.println("original time: " + originalUpdateTime);
 			System.out.println("-----------");
-			// TODO Send email containing new items
+			// TODO Send email containing new items and fix new item condition
 		}
 		//table = new JTable(makeData(), columnNames);
 		//table.setModel(new ItemTableModel(this));
