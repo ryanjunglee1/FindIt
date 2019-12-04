@@ -47,7 +47,8 @@ public class SearchQuery {
 	 * @return a SearchResult object containing all the items that fit the search parameters
 	 */
 	public SearchResult getSearch(){
-		//Block of code that simulates webscraper returning an arraylist of items based on required conditions
+		
+		/*
 		String baseURL = scraper.website.location();
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
 		ArrayList<Item> itemarraylist = new ArrayList<Item>();
@@ -75,8 +76,10 @@ public class SearchQuery {
 				try {
 					if (!s.isEmpty()) {
 						Item item = new Item(s);
-						itemarraylist.add(item);
-						System.out.println(item + "\n");
+						if (item.isNull == false) {
+							itemarraylist.add(item);
+							System.out.println(item + "\n");
+						}
 					}
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
@@ -87,9 +90,56 @@ public class SearchQuery {
 				}
 			}
 		}
-		SearchResult results = new SearchResult(itemarraylist, this.searchKeywordsPositive[0]);
+		*/
+		ArrayList<Item> itemarraylist = updateSearch();
+		SearchResult results = new SearchResult(itemarraylist, this.searchKeywordsPositive[0], this);
 		//results.printItems();
 		return results;
+	}
+	
+	public ArrayList<Item> updateSearch() {
+		String baseURL = scraper.website.location();
+		String[] keywordURL = new String[this.searchKeywordsPositive.length];
+		ArrayList<Item> itemarraylist = new ArrayList<Item>();
+		for (int i = 0; i < keywordURL.length; i++) {
+			keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i];
+			System.out.println(keywordURL[i]);
+		}
+		ArrayList<String> itemURL = new ArrayList<String>();
+		Document[] documents = new Document[keywordURL.length];
+		for (int i = 0; i < documents.length; i++) {
+			try {
+				documents[i] = Jsoup.connect(keywordURL[i]).get();
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			Elements rows = documents[i].getElementsByClass("rows");
+			Elements resultrows = rows.get(0).children();
+			for (Element resultrow : resultrows) {
+				itemURL.add(resultrow.children().get(0).attributes().get("href"));
+			}
+			for (String s : itemURL) {
+				//System.out.println(s);
+				try {
+					if (!s.isEmpty()) {
+						Item item = new Item(s);
+						if (item.isNull == false) {
+							itemarraylist.add(item);
+							System.out.println(item + "\n");
+						}
+					}
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return itemarraylist;
 	}
 	
 	
