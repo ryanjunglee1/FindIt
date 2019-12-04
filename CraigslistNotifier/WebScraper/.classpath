@@ -22,5 +22,7 @@
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/libs/okio-1.14.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/client-combined-3.141.59.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/Selenium/client-combined-3.141.59-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ryanm/Documents/GitHub/CraigslistNotifier/CraigslistNotifier/CraigslistNotifier/WebScraper/activation-1.1.1.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

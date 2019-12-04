@@ -4,8 +4,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Attributes;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.*;
+//import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.awt.Desktop;
@@ -41,9 +41,9 @@ public class Item {
 		String html = "";
 		for (WebElement element: driver.findElements(By.cssSelector("*"))) {
 			html += element.getText();
-		}
-		this.website = Jsoup.parse(html);
-		*/
+		}*/
+		this.website = Jsoup.parse(itemURL);
+		
 		this.website = Jsoup.connect(itemURL).get();
 		this.itemName = website.getElementById("titletextonly").html();
 		this.description = website.getElementById("postingbody").html();
