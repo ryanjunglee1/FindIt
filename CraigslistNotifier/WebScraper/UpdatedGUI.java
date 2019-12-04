@@ -254,7 +254,11 @@ public class UpdatedGUI extends Application {
 						" search area: " + search.getArea() + " search subarea: " + search.getSubArea() + 
 						" search topic: " + search.getTopic() + " search category: " + search.getCategory()); 
 				SearchQuery q = new SearchQuery(guiTest, search);
-				q.getSearch();
+				try {
+					q.getSearch();
+				} catch (NullPointerException z) {
+					z.printStackTrace();
+				}
 			} else {
 				System.out.println("incomplete search");
 			}
