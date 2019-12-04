@@ -10,7 +10,7 @@ public class TestWebScraper {
 
        	System.out.println(scrape);
        	*/
-    	try {
+    	/*try {
 			Item i = new Item("https://washingtondc.craigslist.org/doc/ele/d/washington-home-security-camera/7019702676.html");
 			System.out.println(i);
 		} catch (NumberFormatException e) {
@@ -19,6 +19,9 @@ public class TestWebScraper {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+    	MailSender sender = new MailSender("ryanmanga369@gmail.com", "Test", "I hope this works");
+    	System.out.println(sender.sendMail());
+    	
     }
 }
