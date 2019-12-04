@@ -166,12 +166,31 @@ public class SearchResult {
 	
 	public void updateTable(ArrayList<Item> items) {
 		ArrayList<Item> originalList = this.itemList;
+		LocalDateTime originalUpdateTime = this.lastUpdated;
+		ArrayList<Item> newItems = new ArrayList<Item>();
 		this.itemList = items;
 		table.removeAll();
 		table.setModel(new ItemTableModel(this));
 		table.addMouseListener(new JTableButtonMouseListener(this.table));
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
 		table.getColumn("button").setCellRenderer(buttonRenderer);
+		this.lastUpdated = LocalDateTime.now();
+		System.out.println("Last updated: " + this.lastUpdated.toString());
+		for (Item  i : this.itemList) {
+			if (i.dateTimePosted.isAfter(originalUpdateTime) || i.dateTimeUpdated.isAfter(originalUpdateTime))
+				newItems.add(i);
+				//System.out.println(i.toString());
+				//MailSender sender = new MailSender("artishala0@gmail.com", "Test", i.toString());
+		    	//System.out.println(sender.sendMail());
+		}
+		System.out.println("--------NEW ITEMS----------");
+		for (Item i : newItems) {
+			System.out.println("-----------");
+			System.out.println("Item: " + i.toString() + " post date: " + i.dateTimePosted + " update date: " + i.dateTimeUpdated);
+			System.out.println("original time: " + originalUpdateTime);
+			System.out.println("-----------");
+			// TODO Send email containing new items
+		}
 		//table = new JTable(makeData(), columnNames);
 		//table.setModel(new ItemTableModel(this));
 		
