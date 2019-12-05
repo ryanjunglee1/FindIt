@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -34,6 +35,8 @@ public class UpdatedGUI extends Application {
 	private ComboBox<String> topicselect = new ComboBox<>();
 	private ComboBox<String> categoryselect = new ComboBox<>();
 	private TextField keywordfield = new TextField();
+	private TextField minPriceField = new TextField();
+	private TextField maxPriceField = new TextField();
 	private Button button = new Button("Search");
 	
 	@Override
@@ -107,12 +110,33 @@ public class UpdatedGUI extends Application {
 		BorderPane label_boxCategory = new BorderPane();
 		label_boxCategory.setLeft(categorylabel);
 		label_boxCategory.setRight(categoryselect);
+		
+		Label priceRange = new Label("(optional) Price Range:");
+		priceRange.setPadding(new Insets(5));
+		Label to = new Label("to");
+		to.setPadding(new Insets(5));
+		Label dollarSign = new Label("$");
+		dollarSign.setPadding(new Insets(5));
+		String minPriceText = "min";
+		minPriceField.setPromptText(minPriceText);
+		minPriceField.setPrefWidth(minPriceText.length() * 24);
+		minPriceField.setPadding(new Insets(5));
+
+		String maxPriceText = "max";
+		maxPriceField.setPromptText(maxPriceText);
+		maxPriceField.setPrefWidth(maxPriceText.length() * 24);
+		maxPriceField.setPadding(new Insets(5));
+		FlowPane textPricePane = new FlowPane(dollarSign, minPriceField, to, maxPriceField);
+		textPricePane.setPrefWidth(182);
+		BorderPane priceRangePane = new BorderPane();
+		priceRangePane.setLeft(priceRange);
+		priceRangePane.setRight(textPricePane);
 
 	
 		Region regionComboBoxes = new Region();
 		regionComboBoxes.setPadding(new Insets(5));
 		VBox comboboxes = new VBox(regionComboBoxes, label_boxState, label_boxArea, label_boxSubArea, 
-																	label_boxTopic, label_boxCategory);
+																	label_boxTopic, label_boxCategory, priceRangePane);
 		
 		comboboxes.setStyle("-fx-border-color: red; -fx-background-color: lightgray;");
 		pane.setLeft(comboboxes);
@@ -249,12 +273,21 @@ public class UpdatedGUI extends Application {
 			
 			String labeltext = this.keywordfield.getText();
 			String[] guiTest = {labeltext};
+			Options options = new Options(null, null, new float[]{minPriceField.getText().equals("") ? 0 : Float.parseFloat(minPriceField.getText()), maxPriceField.getText().equals("") ? Float.MAX_VALUE : Float.parseFloat(maxPriceField.getText())});
+			
+			String str = "";
 			
 			if (search.hasCategory()) {
 				System.out.println("keyword: "  + labeltext + " search state: " + search.getState() + 
 						" search area: " + search.getArea() + " search subarea: " + search.getSubArea() + 
-						" search topic: " + search.getTopic() + " search category: " + search.getCategory()); 
-				SearchQuery q = new SearchQuery(guiTest, search);
+						" search topic: " + search.getTopic() + " search category: " + search.getCategory());
+						if (options.getMinPrice() != 0)
+							str += " min price: $" + options.getMinPrice(); 
+						if (options.getMaxPrice() != Float.MAX_VALUE)
+							str += " max price: $" + options.getMaxPrice();
+						System.out.println(str);
+
+						SearchQuery q = new SearchQuery(guiTest, options, search);
 				try {
 					q.getSearch();
 				} catch (NullPointerException z) {

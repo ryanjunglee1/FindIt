@@ -33,8 +33,8 @@ public class Item {
 		try {
 			this.itemURL = itemURL;
 			this.website = Jsoup.connect(itemURL).get();
-			this.itemName = website.getElementById("titletextonly").html();
-			this.description = website.getElementById("postingbody").html();
+			this.itemName = removeFormats(website.getElementById("titletextonly").html());
+			this.description = removeFormats(website.getElementById("postingbody").html());
 			this.itemURI = URI.create(this.itemURL);
 			try {
 				this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
@@ -140,9 +140,14 @@ public class Item {
 		}
 	}
 	
+
 	public boolean equals(Item i) {
 		if (this.postID.contentEquals(i.postID))
 			return true;
 		return false;
+}
+
+	public static String removeFormats(String str) {
+		return str.replaceAll("&amp;", "&");
 	}
 }
