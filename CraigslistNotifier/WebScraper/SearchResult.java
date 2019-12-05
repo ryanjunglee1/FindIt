@@ -79,7 +79,7 @@ public class SearchResult {
 		scrollpane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-		table.getColumn("button").setCellRenderer(buttonRenderer);
+		table.getColumn("Show in CL").setCellRenderer(buttonRenderer);
 		
 		//notification panel elements populated
 		notificationPanel.add(label);
@@ -173,7 +173,7 @@ public class SearchResult {
 		table.setModel(new ItemTableModel(this));
 		table.addMouseListener(new JTableButtonMouseListener(this.table));
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-		table.getColumn("button").setCellRenderer(buttonRenderer);
+		table.getColumn("Show in CL").setCellRenderer(buttonRenderer);
 		this.lastUpdated = LocalDateTime.now();
 		System.out.println("Last updated: " + this.lastUpdated.toString());
 		for (Item  i : this.itemList) {

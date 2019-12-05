@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class ItemTableModel extends AbstractTableModel {
 		private static final long serialVersionUID = 1L;
-		private static final String[] COLUMN_NAMES = new String[] {"Item Name", "Item Price", "button"};
+		private static final String[] COLUMN_NAMES = new String[] {"Item Name", "Item Price", "Show in CL"};
         private static final Class<?>[] COLUMN_TYPES = new Class<?>[] {String.class, String.class, JButton.class};
         private Object[][] data;
         private SearchResult result;
