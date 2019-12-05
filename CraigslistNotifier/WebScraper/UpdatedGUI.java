@@ -47,7 +47,7 @@ public class UpdatedGUI extends Application {
 	public void start(Stage primaryStage) {
 		
 		// Create a scene and place it in the stage.
-		Scene scene = new Scene(guiLayout(), 800, 600);
+		Scene scene = new Scene(guiLayout(), 850, 600);
 		
 		primaryStage.setTitle("Web Scraper"); 	// set stage title
 		primaryStage.setScene(scene); 			// Place the scene in the stage

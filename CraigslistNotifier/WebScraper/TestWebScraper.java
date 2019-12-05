@@ -22,6 +22,7 @@ public class TestWebScraper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+    	/*
     	ArrayList<Item> newItems = new ArrayList<Item>();
     	newItems.add(new Item("https://washingtondc.craigslist.org/doc/ele/d/washington-amazon-fire-tv-sticks-and-tv/7030842455.html"));
     	newItems.add(new Item("https://washingtondc.craigslist.org/nva/ele/d/fairfax-38l-electric-hot-water-boiler/7032340313.html"));
@@ -50,7 +51,9 @@ public class TestWebScraper {
     	MailSender sender = new MailSender("artishala0@gmail.com", "Test", "I hope this works");
     	System.out.println(sender.sendMail());
 
-
+	*/
+    	Item i = new Item("https://washingtondc.craigslist.org/nva/jwl/d/manassas-jewels-czech-enamel-etc/7026127777.html");
+    	System.out.println(i.description);
     	
     }
 }

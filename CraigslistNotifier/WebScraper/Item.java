@@ -35,6 +35,7 @@ public class Item {
 			this.website = Jsoup.connect(itemURL).get();
 			this.itemName = removeFormats(website.getElementById("titletextonly").html());
 			this.description = removeFormats(website.getElementById("postingbody").html());
+			this.cleanDescription();
 			this.itemURI = URI.create(this.itemURL);
 			try {
 				this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
@@ -149,5 +150,10 @@ public class Item {
 
 	public static String removeFormats(String str) {
 		return str.replaceAll("&amp;", "&");
+	}
+	
+	public void cleanDescription() {
+		this.description = this.description.replaceAll("\\<.*?\\>", "");
+		this.description = this.description.replace("QR Code Link to This Post", "");
 	}
 }
