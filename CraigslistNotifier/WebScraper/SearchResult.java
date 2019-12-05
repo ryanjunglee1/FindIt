@@ -79,7 +79,7 @@ public class SearchResult {
 		scrollpane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-		table.getColumn("button").setCellRenderer(buttonRenderer);
+		table.getColumn("Show in CL").setCellRenderer(buttonRenderer);
 		
 		//notification panel elements populated
 		notificationPanel.add(label);
@@ -166,12 +166,46 @@ public class SearchResult {
 	
 	public void updateTable(ArrayList<Item> items) {
 		ArrayList<Item> originalList = this.itemList;
+		LocalDateTime originalUpdateTime = this.lastUpdated;
+		ArrayList<Item> newItems = new ArrayList<Item>();
 		this.itemList = items;
 		table.removeAll();
 		table.setModel(new ItemTableModel(this));
 		table.addMouseListener(new JTableButtonMouseListener(this.table));
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-		table.getColumn("button").setCellRenderer(buttonRenderer);
+		table.getColumn("Show in CL").setCellRenderer(buttonRenderer);
+		this.lastUpdated = LocalDateTime.now();
+		System.out.println("Last updated: " + this.lastUpdated.toString());
+		for (Item  i : this.itemList) {
+			boolean foundequal = false;
+			for (Item j : originalList) {
+				if (i.equals(j))
+					foundequal = true;
+			}
+			if (!foundequal)
+				newItems.add(i);
+		}
+		System.out.println("--------NEW ITEMS----------");
+		String emailsubject = "Your " + this.query.search.getState() + " " + this.query.search.getCategory() + " search has new items!";
+		String emailbody = "";
+		for (Item i : newItems) {
+			System.out.println("-----------");
+			System.out.println("Item: " + i.toString() + " post date: " + i.dateTimePosted + " update date: " + i.dateTimeUpdated);
+			System.out.println("original time: " + originalUpdateTime.toString());
+			System.out.println("-----------");
+			try {
+			emailbody = emailbody + i.itemName + " $" + i.itemPrice + "\n Posted: " + i.dateTimePosted.toString() + "\n" +
+					i.itemURL + "\n" + "\n";
+			} catch (NullPointerException z) {
+				z.printStackTrace();
+			}
+			// TODO Send email containing new items and fix new item condition
+		}
+		if (!newItems.isEmpty()) {
+	    	MailSender sender = new MailSender(updateEmail, emailsubject, emailbody);
+	    	System.out.println("Email sent: " + sender.sendMail());
+		}
+			
 		//table = new JTable(makeData(), columnNames);
 		//table.setModel(new ItemTableModel(this));
 		

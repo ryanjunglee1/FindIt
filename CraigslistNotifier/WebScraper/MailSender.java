@@ -52,6 +52,7 @@ public class MailSender {
 			return true;
 		}
 		catch (MessagingException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

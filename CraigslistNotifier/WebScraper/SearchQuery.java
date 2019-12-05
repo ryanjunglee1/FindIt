@@ -134,7 +134,7 @@ public class SearchQuery {
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
 		ArrayList<Item> itemarraylist = new ArrayList<Item>();
 		for (int i = 0; i < keywordURL.length; i++) {
-			keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i];
+			keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i] + "&sort=date";
 			System.out.println(keywordURL[i]);
 		}
 		ArrayList<String> itemURL = new ArrayList<String>();
