@@ -157,6 +157,7 @@ public class Search {
 	public HashMap<String, String> getCategoryMap() { return categoryMap; }
 
 	public boolean setCategoryMap() {
+		categoryMap.clear();
 		System.out.println(getTopicMap().get(topic));
 		Elements categoryItems = website.getElementById(getTopicMap().get(topic)).getElementsByClass("cats").first().children();
 		if (categoryItems.size() > 0) {
@@ -165,7 +166,7 @@ public class Search {
 				for (Element category: item.children()) {
 					category = category.children().first();
 					String name = category.children().first().html();
-					categoryMap.put(name.substring(0, name.indexOf('<')).replaceAll("&nbsp;", " ").replaceAll("amp;", ""), category.attributes().get("class"));
+					categoryMap.put(name.substring(0, name.indexOf('<')).replaceAll("&nbsp;", " ").replaceAll("&amp;", "&"), category.attributes().get("class"));
 				}
 			}
 		}
