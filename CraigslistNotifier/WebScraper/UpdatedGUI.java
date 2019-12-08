@@ -299,8 +299,13 @@ public class UpdatedGUI extends Application {
 			this.checkBoxMap.put("hasPhoneOnly",false);
 			this.checkBoxMap.put("cryptoAccepted",false);
 			this.checkBoxMap.put("deliveryAvailable",false);
-			Options options = new Options(this.checkBoxMap, null, new float[]{minPriceField.getText().equals("") ? 0 : Float.parseFloat(minPriceField.getText()), maxPriceField.getText().equals("") ? Float.MAX_VALUE : Float.parseFloat(maxPriceField.getText())});
-			
+			Options options = new Options(null, null, new float[2]);
+			try {
+				options = new Options(this.checkBoxMap, null, new float[]{minPriceField.getText().equals("") ? 0 : Float.parseFloat(minPriceField.getText()), maxPriceField.getText().equals("") ? Float.MAX_VALUE : Float.parseFloat(maxPriceField.getText())});
+			}
+			catch (NumberFormatException ie) {
+				
+			}
 			String str = "";
 			
 			if (search.hasCategory()) {
