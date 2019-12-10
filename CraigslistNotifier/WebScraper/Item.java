@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 //Class that represents an item in craigslist
 public class Item {
-	protected String itemName, make, model, description, location, datePosted, dateUpdated;
+	protected String itemName, make, model, description, location, datePosted, dateUpdated, condition, dimensions;
 	protected float itemPrice;
 	protected LocalDateTime dateTimePosted,dateTimeUpdated;
 	protected String itemURL; //change later when URL class is defined
@@ -41,6 +41,23 @@ public class Item {
 				this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
 			} catch (NullPointerException e) {
 				this.itemPrice = 0.00f;
+			}
+			try {
+				Element attrGroup = website.getElementsByClass("attrgroup").first();
+				for (Element element: attrGroup.children()) {
+					String contents = element.html();
+					if (contents.contains("condition: "))
+						condition = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+					else if (contents.contains("make / manufacturer: "))
+						make = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+					else if (contents.contains("model name / number: "))
+						model = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+					else if (contents.contains("size / dimensions: "))
+						dimensions = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+				}
+			}
+			catch (NullPointerException e) {
+				
 			}
 			
 			try {
