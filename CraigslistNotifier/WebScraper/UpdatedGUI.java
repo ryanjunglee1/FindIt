@@ -1,4 +1,6 @@
 
+import java.util.HashMap;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,6 +44,9 @@ public class UpdatedGUI extends Application {
 	private TextField minPriceField = new TextField();
 	private TextField maxPriceField = new TextField();
 	private Button button = new Button("Search");
+	private HashMap<String,Boolean> checkBoxMap = new HashMap<String,Boolean>();
+	private Boolean hasImage, multipleImagesOnly, originalImagesOnly, postedToday, searchTitlesOnly, bundleDuplicates, 
+	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable = false; 
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -283,8 +288,24 @@ public class UpdatedGUI extends Application {
 			
 			String labeltext = this.keywordfield.getText();
 			String[] guiTest = {labeltext};
-			Options options = new Options(null, null, new float[]{minPriceField.getText().equals("") ? 0 : Float.parseFloat(minPriceField.getText()), maxPriceField.getText().equals("") ? Float.MAX_VALUE : Float.parseFloat(maxPriceField.getText())});
-			
+			this.checkBoxMap.put("hasImages", (this.hasImage == null) ? false : this.hasImage);
+			this.checkBoxMap.put("multipleImagesOnly", (this.multipleImagesOnly == null) ? false : this.multipleImagesOnly);
+			this.checkBoxMap.put("originalImagesOnly", (this.originalImagesOnly == null) ? false : this.originalImagesOnly);
+			this.checkBoxMap.put("postedToday", (this.postedToday == null) ? false : this.postedToday);
+			this.checkBoxMap.put("searchTitlesOnly",(this.searchTitlesOnly == null) ? false : this.searchTitlesOnly);
+			this.checkBoxMap.put("bundleDuplicates",false);
+			this.checkBoxMap.put("hideAllDuplicates",false);
+			this.checkBoxMap.put("hasMakeModelOnly",false);
+			this.checkBoxMap.put("hasPhoneOnly",false);
+			this.checkBoxMap.put("cryptoAccepted",false);
+			this.checkBoxMap.put("deliveryAvailable",false);
+			Options options = new Options(null, null, new float[2]);
+			try {
+				options = new Options(this.checkBoxMap, null, new float[]{minPriceField.getText().equals("") ? 0 : Float.parseFloat(minPriceField.getText()), maxPriceField.getText().equals("") ? Float.MAX_VALUE : Float.parseFloat(maxPriceField.getText())});
+			}
+			catch (NumberFormatException ie) {
+				
+			}
 			String str = "";
 			
 			if (search.hasCategory()) {
@@ -479,7 +500,7 @@ public class UpdatedGUI extends Application {
  		bHasMakeModelOnly.setRight(chasMakeModelOnly);
 
  		VBox filterBoxes = new VBox(filterCheckBoxes, filterLabel, bHasImagesOnly, bHasMultImagesOnly,
- 				                    bHasOrigImagesOnly, bSearchTitleOnly, bBundleDuplicates, 
+ 				                    bHasOrigImagesOnly, bSearchTitleOnly, bPostedToday, bBundleDuplicates, 
  				                    bHideAllDuplicates, bHasMakeModelOnly);
  		//filterBoxes.setStyle("-fx-border-color: red; -fx-background-color: lightgray;");
 
@@ -493,11 +514,11 @@ public class UpdatedGUI extends Application {
 
  			// add functionality here
  			if (cHasImagesOnly.isSelected()) {
-
+ 				this.hasImage = true;
  				System.out.println("Has images only was selected");
 
  			} else {
-
+ 				this.hasImage = false;
  				// do nothing
  			}
 
@@ -511,11 +532,11 @@ public class UpdatedGUI extends Application {
 
  			// add functionality here
  			if (cHasMultImagesOnly.isSelected()) {
-
+ 				this.multipleImagesOnly = true;
  				System.out.println("Multiple images only was selected");
 
  			} else {
-
+ 				this.multipleImagesOnly = false;
  				// do nothing
  			}
  		});
@@ -548,9 +569,10 @@ public class UpdatedGUI extends Application {
  			if (cPostedToday.isSelected()) {
 
  				System.out.println("Post today was selected");
+ 				this.postedToday = true;
 
  			} else {
-
+ 				this.postedToday = false;
  				// do nothing
  			}
  		});
@@ -563,11 +585,11 @@ public class UpdatedGUI extends Application {
 
  			// add functionality here
  			if (cSearchTitleOnly.isSelected()) {
-
+ 				this.searchTitlesOnly = true;
  				System.out.println("Search title only was selected");
 
  			} else {
-
+ 				this.searchTitlesOnly = false;
  				// do nothing
  			}
  		});

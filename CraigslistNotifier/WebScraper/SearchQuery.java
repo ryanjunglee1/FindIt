@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -157,7 +158,23 @@ public class SearchQuery {
 				try {
 					if (!s.isEmpty()) {
 						Item item = new Item(s);
+						try {
+							if ((this.hasImage == true) && item.hasImages == false )
+								item.isNull = true;
+							if ((this.multipleImagesOnly == true) && item.hasMultipleImages == false)
+								item.isNull = true;
+							if (this.postedToday == true) {
+								LocalDateTime postdate = item.dateTimePosted;
+								LocalDateTime oldestAllowed = LocalDateTime.now().minusDays(1);
+								if (postdate.isBefore(oldestAllowed))
+									item.isNull = true;
+									System.out.println("Item invalidated!");
+							}
+						} catch (NullPointerException e) {
+							
+						}
 						if (item.isNull == false && this.maxPrice >= this.minPrice && item.itemPrice >= this.minPrice && item.itemPrice <= this.maxPrice) {
+							
 							itemarraylist.add(item);
 							System.out.println(item + "\n");
 						}
