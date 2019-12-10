@@ -52,8 +52,8 @@ public class TestWebScraper {
     	System.out.println(sender.sendMail());
 
 	*/
-    	Item i = new Item("https://washingtondc.craigslist.org/nva/jwl/d/manassas-jewels-czech-enamel-etc/7026127777.html");
-    	System.out.println(i.description);
+    	Item i = new Item("https://washingtondc.craigslist.org/doc/art/d/washington-set-of-47-clip-frames-8x10/7031775886.html");
+    	//System.out.println(i.description);
     	
     }
 }

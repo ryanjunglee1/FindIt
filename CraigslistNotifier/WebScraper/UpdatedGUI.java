@@ -46,7 +46,7 @@ public class UpdatedGUI extends Application {
 	private Button button = new Button("Search");
 	private HashMap<String,Boolean> checkBoxMap = new HashMap<String,Boolean>();
 	private Boolean hasImage, multipleImagesOnly, originalImagesOnly, postedToday, searchTitlesOnly, bundleDuplicates, 
-	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable = false;
+	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable = false; 
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -288,11 +288,11 @@ public class UpdatedGUI extends Application {
 			
 			String labeltext = this.keywordfield.getText();
 			String[] guiTest = {labeltext};
-			this.checkBoxMap.put("hasImages", this.hasImage);
-			this.checkBoxMap.put("multipleImagesOnly", this.multipleImagesOnly);
-			this.checkBoxMap.put("originalImagesOnly",false);
-			this.checkBoxMap.put("postedToday",false);
-			this.checkBoxMap.put("searchTitlesOnly",this.searchTitlesOnly);
+			this.checkBoxMap.put("hasImages", (this.hasImage == null) ? false : this.hasImage);
+			this.checkBoxMap.put("multipleImagesOnly", (this.multipleImagesOnly == null) ? false : this.multipleImagesOnly);
+			this.checkBoxMap.put("originalImagesOnly", (this.originalImagesOnly == null) ? false : this.originalImagesOnly);
+			this.checkBoxMap.put("postedToday", (this.postedToday == null) ? false : this.postedToday);
+			this.checkBoxMap.put("searchTitlesOnly",(this.searchTitlesOnly == null) ? false : this.searchTitlesOnly);
 			this.checkBoxMap.put("bundleDuplicates",false);
 			this.checkBoxMap.put("hideAllDuplicates",false);
 			this.checkBoxMap.put("hasMakeModelOnly",false);

@@ -72,13 +72,20 @@ public class Item {
 			System.out.println(this.postID);
 			Elements times = website.getElementsByClass("postinginfos").first().getElementsByTag("time");
 			try {
+				
 				String rawtimepost = times.first().html();
 				rawtimepost = rawtimepost.substring(0,10) + "T" + rawtimepost.substring(11) + ":00";
-				String rawtimeupdate = times.first().html();
-				rawtimeupdate = rawtimeupdate.substring(0,10) + "T" + rawtimeupdate.substring(11) + ":00";
+				try {
+					String rawtimeupdate = times.get(1).html();
+					rawtimeupdate = rawtimeupdate.substring(0,10) + "T" + rawtimeupdate.substring(11) + ":00";
+					this.dateTimeUpdated = LocalDateTime.parse(rawtimeupdate);
+				} catch (IndexOutOfBoundsException ib) {
+					this.dateTimeUpdated = LocalDateTime.parse(rawtimepost);
+				}
 				this.dateTimePosted = LocalDateTime.parse(rawtimepost);
-				this.dateTimeUpdated = LocalDateTime.parse(rawtimeupdate);
+				
 				System.out.println(this.dateTimePosted.toString() + " " + this.dateTimeUpdated);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

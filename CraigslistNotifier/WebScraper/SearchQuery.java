@@ -168,6 +168,7 @@ public class SearchQuery {
 								LocalDateTime oldestAllowed = LocalDateTime.now().minusDays(1);
 								if (postdate.isBefore(oldestAllowed))
 									item.isNull = true;
+									System.out.println("Item invalidated!");
 							}
 						} catch (NullPointerException e) {
 							
