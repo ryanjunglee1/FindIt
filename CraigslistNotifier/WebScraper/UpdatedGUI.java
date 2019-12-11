@@ -1,7 +1,13 @@
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -11,8 +17,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
@@ -22,6 +30,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * The main GUI that accepts a search parameter (i.e., TV, camera, etc.) from a user and creates a searchQuery
@@ -47,6 +56,9 @@ public class UpdatedGUI extends Application {
 	private HashMap<String,Boolean> checkBoxMap = new HashMap<String,Boolean>();
 	private Boolean hasImage, multipleImagesOnly, originalImagesOnly, postedToday, searchTitlesOnly, bundleDuplicates, 
 	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable = false; 
+	protected ArrayList<String> searchKeywordsPositive = new ArrayList<String>();
+	protected ArrayList<String> searchKeywordsNegative = new ArrayList<String>();
+	public String lastquery = "";
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -285,9 +297,14 @@ public class UpdatedGUI extends Application {
 		 * Event listener for the search button
 		 */
 		button.setOnAction((e) -> {
-			
+			if (!this.lastquery.isBlank())
+				this.searchKeywordsPositive.remove(lastquery);
 			String labeltext = this.keywordfield.getText();
-			String[] guiTest = {labeltext};
+			this.lastquery = labeltext;
+			if (!this.searchKeywordsPositive.contains(labeltext)) {
+				this.searchKeywordsPositive.add(labeltext);
+			}
+			String[] guiTest = this.searchKeywordsPositive.toArray(new String[0]);
 			this.checkBoxMap.put("hasImages", (this.hasImage == null) ? false : this.hasImage);
 			this.checkBoxMap.put("multipleImagesOnly", (this.multipleImagesOnly == null) ? false : this.multipleImagesOnly);
 			this.checkBoxMap.put("originalImagesOnly", (this.originalImagesOnly == null) ? false : this.originalImagesOnly);
@@ -652,15 +669,19 @@ public class UpdatedGUI extends Application {
 	
 	class ObjectTable {
 
- 		private String s1 = "empty";
- 	    private double d1 = 0.0;
+ 		public String keyword = "empty";
+
 
  	    public ObjectTable() {
+ 	    	
  	    }
 
- 	    public ObjectTable(String s1, double d1) {
- 	        this.s1 = s1;
- 	        this.d1 = d1;
+ 	    public ObjectTable(String s) {
+ 	        this.keyword = s;
+ 	    }
+ 	    
+ 	    public String getKeyword() {
+ 	    	return this.keyword;
  	    }
 
 
@@ -676,27 +697,30 @@ public class UpdatedGUI extends Application {
  		aField.setPrefWidth(150);
  		Button aButton = new Button("Add");
  		aButton.setPadding(new Insets(5));
- 		HBox aBox = new HBox(aField, aButton);
+ 		Button aClear = new Button("Clear");
+ 		aClear.setPadding(new Insets(5));
+ 		HBox aBox = new HBox(aField, aButton, aClear);
  		aBox.setPadding(new Insets(5));
 
- 		TableView aTable = new TableView();
+ 		TableView<ObjectTable> aTable = new TableView<ObjectTable>();
  		aTable.setPrefSize(250, 450);
  		aTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
- 		TableView bTable = new TableView();
+ 		TableView<ObjectTable> bTable = new TableView<ObjectTable>();
  		bTable.setPrefSize(250, 450);
  		bTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
  		// The input type to the TableColumns can be set to other objects type, 
  		// even user defined classes etc. 
-         TableColumn<String, ObjectTable> col1a = new TableColumn<>("First Column");
-         //col1.setCellValueFactory(new PropertyValueFactory<>("firstCol"));
-         TableColumn<String, ObjectTable> col2a = new TableColumn<>("Second Column");
+         TableColumn<ObjectTable, String> col1a = new TableColumn<>("Include these keywords");
+         col1a.setCellValueFactory(new Callback<CellDataFeatures<ObjectTable, String>, ObservableValue<String>>() {
+             public ObservableValue<String> call(CellDataFeatures<ObjectTable, String> p) {
+                 return new ReadOnlyObjectWrapper(p.getValue().getKeyword());
+             }
+          });
          //col2.setCellValueFactory(new PropertyValueFactory<>("sendCol"));
 
          aTable.getColumns().add(col1a);
-         aTable.getColumns().add(col2a);
-         aTable.getItems().add(new ObjectTable("Row1", 10.0));
-         aTable.getItems().add(new ObjectTable("Row2", 10.0));
+         //aTable.getItems().add(new ObjectTable("Test"));
  		VBox aVBox = new VBox(aBox, aTable);
  		aVBox.setPadding(new Insets(5));
  		right.setLeft(aVBox);
@@ -707,24 +731,51 @@ public class UpdatedGUI extends Application {
  		bField.setPadding(new Insets(5));
  		bField.setPrefWidth(150);
  		Button bButton = new Button("Add");
- 		aButton.setPadding(new Insets(5));
- 		HBox bBox = new HBox(bField, bButton);
+ 		bButton.setPadding(new Insets(5));
+ 		Button bClear = new Button("Clear");
+ 		bClear.setPadding(new Insets(5));
+ 		HBox bBox = new HBox(bField, bButton,bClear);
  		bBox.setPadding(new Insets(5));
 
 
  		// The input type to the TableColumns can be set to other objects type, 
  		// even user defined classes etc. 
-         TableColumn<String, ObjectTable> col1b = new TableColumn<>("First Column");
-         //col1.setCellValueFactory(new PropertyValueFactory<>("firstCol"));
-         TableColumn<String, ObjectTable> col2b = new TableColumn<>("Second Column");
+         TableColumn<ObjectTable, String> col1b = new TableColumn<ObjectTable, String>("Exclude these keywords");
+         col1b.setCellValueFactory(new Callback<CellDataFeatures<ObjectTable, String>, ObservableValue<String>>() {
+             public ObservableValue<String> call(CellDataFeatures<ObjectTable, String> p) {
+                 return new ReadOnlyObjectWrapper(p.getValue().getKeyword());
+             }
+          });
          //col2.setCellValueFactory(new PropertyValueFactory<>("sendCol"));
 
          bTable.getColumns().add(col1b);
-         bTable.getColumns().add(col2b);
 
-         bTable.getItems().add(new ObjectTable("Row1", 20.0));
-         bTable.getItems().add(new ObjectTable("Row2", 20.0));
-
+         //bTable.getItems().add(new ObjectTable("Test"));
+         aButton.setOnAction((e) -> {
+        	 if (aField.getText().isBlank()) {
+        		 //do nothing
+        	 }
+        	 else {
+        		 aTable.getItems().add(new ObjectTable(aField.getText()));
+        		 this.searchKeywordsPositive.add(aField.getText());
+        	 }
+         });
+         bButton.setOnAction((e) -> {
+        	 if (bField.getText().isBlank()) {
+        		 //do nothing
+        	 } else {
+        		 bTable.getItems().add(new ObjectTable(bField.getText()));
+        		 this.searchKeywordsNegative.add(bField.getText());
+        	 }
+         });
+         aClear.setOnAction((e) -> {
+        	 aTable.getItems().clear();
+        	 this.searchKeywordsPositive.clear();
+         });
+         bClear.setOnAction((e) -> {
+        	 aTable.getItems().clear();
+        	 this.searchKeywordsNegative.clear();
+         });
          VBox bVBox = new VBox(bBox, bTable);
          bVBox.setPadding(new Insets(5,5,0,0));
          right.setRight(bVBox);

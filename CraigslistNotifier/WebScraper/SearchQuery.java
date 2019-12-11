@@ -135,57 +135,70 @@ public class SearchQuery {
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
 		ArrayList<Item> itemarraylist = new ArrayList<Item>();
 		for (int i = 0; i < keywordURL.length; i++) {
-			keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i] + "&sort=date";
-			System.out.println(keywordURL[i]);
+			System.out.println("Keyword #" + i + ": " + this.searchKeywordsPositive[i]);
+			if (!this.searchKeywordsPositive[i].isBlank() && this.searchKeywordsPositive.length > 1) {
+				keywordURL[i] = baseURL + "query=" + this.searchKeywordsPositive[i] + "&sort=date";
+				System.out.println(keywordURL[i]);
+			} else if (this.searchKeywordsPositive[i].isBlank() && this.searchKeywordsPositive.length == 1) {
+				keywordURL[i] = baseURL + "&sort=date";
+				System.out.println(keywordURL[i]);
+			} else if (this.searchKeywordsPositive[i].isBlank() && this.searchKeywordsPositive.length > 1) {
+				keywordURL[i] = "none";
+				System.out.println("No keyword url added");
+			}
 		}
 		ArrayList<String> itemURL = new ArrayList<String>();
 		Document[] documents = new Document[keywordURL.length];
 		for (int i = 0; i < documents.length; i++) {
-			try {
-				documents[i] = Jsoup.connect(keywordURL[i]).get();
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-			Elements rows = documents[i].getElementsByClass("rows");
-			Elements resultrows = rows.get(0).children();
-			for (Element resultrow : resultrows) {
-				itemURL.add(resultrow.children().get(0).attributes().get("href"));
-			}
-			for (String s : itemURL) {
-				//System.out.println(s);
+			if (!keywordURL[i].equals("none")) {
 				try {
-					if (!s.isEmpty()) {
-						Item item = new Item(s);
-						try {
-							if ((this.hasImage == true) && item.hasImages == false )
-								item.isNull = true;
-							if ((this.multipleImagesOnly == true) && item.hasMultipleImages == false)
-								item.isNull = true;
-							if (this.postedToday == true) {
-								LocalDateTime postdate = item.dateTimePosted;
-								LocalDateTime oldestAllowed = LocalDateTime.now().minusDays(1);
-								if (postdate.isBefore(oldestAllowed))
-									item.isNull = true;
-									System.out.println("Item invalidated!");
-							}
-						} catch (NullPointerException e) {
-							
-						}
-						if (item.isNull == false && this.maxPrice >= this.minPrice && item.itemPrice >= this.minPrice && item.itemPrice <= this.maxPrice) {
-							
-							itemarraylist.add(item);
-							System.out.println(item + "\n");
-						}
-					}
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					documents[i] = Jsoup.connect(keywordURL[i]).get();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
 				}
+				Elements rows = documents[i].getElementsByClass("rows");
+				Elements resultrows = rows.get(0).children();
+				for (Element resultrow : resultrows) {
+					itemURL.add(resultrow.children().get(0).attributes().get("href"));
+				}
+				for (String s : itemURL) {
+					System.out.println(s);
+					try {
+						if (!s.isEmpty()) {
+							Item item = new Item(s);
+							try {
+								if ((this.hasImage == true) && item.hasImages == false )
+									item.isNull = true;
+								if ((this.multipleImagesOnly == true) && item.hasMultipleImages == false)
+									item.isNull = true;
+								if (this.postedToday == true) {
+									LocalDateTime postdate = item.dateTimePosted;
+									LocalDateTime oldestAllowed = LocalDateTime.now().minusDays(1);
+									if (postdate.isBefore(oldestAllowed))
+										item.isNull = true;
+										System.out.println("Item invalidated!");
+								}
+							} catch (NullPointerException e) {
+								
+							}
+							if (item.isNull == false && this.maxPrice >= this.minPrice && item.itemPrice >= this.minPrice && item.itemPrice <= this.maxPrice) {
+								
+								itemarraylist.add(item);
+								System.out.println(item + "\n");
+							}
+						}
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} else {
+				
 			}
 		}
 		return itemarraylist;
