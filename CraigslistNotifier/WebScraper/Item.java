@@ -48,20 +48,20 @@ public class Item {
 				city = city.substring(0, city.length() - 1);
 				this.location = city + " " +
 						website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
-				System.out.println(this.location);
+				//System.out.println(this.location);
 			} catch (NullPointerException e) {
 				try {
 					String city = website.getElementsByClass("postingtitle").first().getElementsByTag("small").first().html().replace("(", "");
 					city = city.substring(0, city.length() - 1);
 					this.location = city;
-					System.out.println(this.location);
+					//System.out.println(this.location);
 				} catch (NullPointerException d) {
 					try {
 						this.location = website.getElementsByClass("crumb area").first().getElementsByTag("a").first().html();
-						System.out.println(this.location);
+						//System.out.println(this.location);
 					} catch (NullPointerException c) {
 						this.location = null;
-						System.out.println("crumb area not found");
+						//System.out.println("crumb area not found");
 					}
 				}
 				
@@ -105,9 +105,9 @@ public class Item {
 						}
 					}
 				}
-				System.out.println("Fullsize: " + this.fullsizeimg);
+				//System.out.println("Fullsize: " + this.fullsizeimg);
 				for (String s : this.itemThumbs) {
-					System.out.println(s);
+					//System.out.println(s);
 				}
 				this.hasImages = true;
 				if (!this.itemThumbs.isEmpty())
@@ -116,11 +116,11 @@ public class Item {
 					this.hasMultipleImages = false;
 				
 			} catch (NullPointerException e) {
-				System.out.println("no images, null pointer");
+				//System.out.println("no images, null pointer");
 				this.hasImages = false;
 				this.hasMultipleImages = false;
 			} catch (IndexOutOfBoundsException o) {
-				System.out.println("no images, out of bounds");
+				//System.out.println("no images, out of bounds");
 				this.hasImages = false;
 				this.hasMultipleImages = false;
 			}
