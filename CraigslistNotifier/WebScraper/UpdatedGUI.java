@@ -79,14 +79,20 @@ public class UpdatedGUI extends Application {
 		launch(args);
 	}
 	
+	/**
+	 * Creates a Scene for the WebScraper root Node and place's it on the Stage.
+	 * @param guiLayout(), width, and height.
+	 * This guiLayout() guide includes all UI components for the WebScraper program. 
+	 * @author Weezha Yahyapoor
+	 */
 	public BorderPane guiLayout() {
 		
 		// Create the main BorderPane to host all UI controls
 		BorderPane pane = new BorderPane();
 		
 		//================================== Left Pane ================================	
-		/*
-		 * Creating the GUI components for different selection menu (ComboBoxes)
+		/**
+		 * Create UI control for choosing a state.
 		 */
 		stateselect.setPrefWidth(150);
 		stateselect.setValue("Choose state");
@@ -101,6 +107,11 @@ public class UpdatedGUI extends Application {
 		label_boxState.setLeft(stateLable);
 		label_boxState.setRight(stateselect);
 		
+		/**
+		 * Create UI control for choosing a city in the selected state.
+		 * Not all states have specific localities like Northern VA when VA is selected
+		 * as a state.
+		 */
 		areaselect.setValue("Choose area");
 		areaselect.setPrefWidth(stateselect.getPrefWidth());
 		Label areaLable = new Label("Choose area:");
@@ -109,6 +120,10 @@ public class UpdatedGUI extends Application {
 		label_boxArea.setLeft(areaLable);
 		label_boxArea.setRight(areaselect);
 		
+		/**
+		 * Create UI control for choosing a locality in the selected state or city.
+		 * Not all states have sub localities.
+		 */
 		subareaselect.setValue("Choose sub area");
 		subareaselect.setPrefWidth(stateselect.getPrefWidth());
 		Label subareaselectLabel = new Label("Choose sub area:");
@@ -125,6 +140,9 @@ public class UpdatedGUI extends Application {
 		label_boxTopic.setLeft(topiclabel);
 		label_boxTopic.setRight(topicselect);
 		
+		/**
+		 * Create UI control for selecting an activity such as events etc.
+		 */
 		categoryselect.setValue("Choose category");
 		categoryselect.setPrefWidth(stateselect.getPrefWidth());
 		Label categorylabel = new Label("Choose category:");
@@ -133,6 +151,10 @@ public class UpdatedGUI extends Application {
 		label_boxCategory.setLeft(categorylabel);
 		label_boxCategory.setRight(categoryselect);
 		
+		/**
+		 * Create UI control for capturing a user's desired price range, which is
+		 * used to filter the list of available options. 
+		 */
 		Label priceRange = new Label("(optional) Price Range:");
 		priceRange.setPadding(new Insets(5));
 		Label to = new Label("to");
@@ -148,24 +170,34 @@ public class UpdatedGUI extends Application {
 		maxPriceField.setPromptText(maxPriceText);
 		maxPriceField.setPrefWidth(maxPriceText.length() * 24);
 		maxPriceField.setPadding(new Insets(5));
-		FlowPane textPricePane = new FlowPane(dollarSign, minPriceField, to, maxPriceField);
-		textPricePane.setPrefWidth(182);
+		//FlowPane textPricePane = new FlowPane(dollarSign, minPriceField, to, maxPriceField);
+		//textPricePane.setPrefWidth(182);
+		HBox hboxPricePane = new HBox(dollarSign,minPriceField, to, maxPriceField);
 		BorderPane priceRangePane = new BorderPane();
 		priceRangePane.setLeft(priceRange);
-		priceRangePane.setRight(textPricePane);
-
+		//priceRangePane.setRight(textPricePane);
+		priceRangePane.setRight(hboxPricePane);
 	
 		Region regionComboBoxes = new Region();
 		regionComboBoxes.setPadding(new Insets(5));
 		priceRangePane.setPadding(new Insets(20,0,0,0));
+		
+		
 		VBox comboboxes = new VBox(regionComboBoxes, label_boxState, label_boxArea, label_boxSubArea, 
-																	label_boxTopic, label_boxCategory, priceRangePane, setFiltersCheckBoxes());
+										label_boxTopic, label_boxCategory, priceRangePane, setFiltersCheckBoxes());
 		
 		comboboxes.setStyle("-fx-border-color: red; -fx-background-color: lightgray;");
+		
+		/**
+		 * Set the GUI to display selection, price range, and filter check boxes UI controls.
+		 */
 		pane.setLeft(comboboxes);
 		// ============================================================================
 		
 		// ============================ Top Pane =========================================
+		/**
+		 * Create the tile of the GUI
+		 */
 		Region titleRTopPane = new Region();
 		Label titleLable = new Label("Craigslist Web Scraper");
 		titleLable.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 30));
@@ -179,6 +211,10 @@ public class UpdatedGUI extends Application {
 		//===============================================================================
 		
 		// ================================ Bottom Pane ======================================
+		/**
+		 * Create a search field and a button to capture a customer's desired search term like a 
+		 * 'cellphone' etc.. 
+		 */
 		String field = "Search for an item on Craigslist here ...";		
 		keywordfield.setPromptText("Search for an item on Craigslist here ...");
 		keywordfield.setPrefWidth(field.length() * 6);
@@ -195,14 +231,18 @@ public class UpdatedGUI extends Application {
 		// ====================================================================================
 		
 		// ===================================== Right Pane ===================================
+		/**
+		 * Create UI tables and text fields to capture a customer's keyword for inclusion or 
+		 * exclusion in the search request. 
+		 */
  		pane.setRight(setRightPane());
  		// ====================================================================================
  		
 		//========================== Event handlers ====================================
-		/*
+		/**
 		 * Event listener for the area combobox, triggered whenever a change to the state of the areaselect 
 		 * object occurs. If the areaselect is not empty and the item selected is not N/A, then set the area 
-		 * of the search to the selected area and if applicable, execute the updateSubAreas method
+		 * of the search to the selected area and execute the updateSubAreas method.
 		 */ 
 		areaselect.setOnAction((e) -> {
 			if(!areaselect.getItems().isEmpty()) {
@@ -219,9 +259,9 @@ public class UpdatedGUI extends Application {
 			}
 		});
 		
-		/*
-		 * Event listener for the subareaselect object, if subareaselect is not empty and not set to "N/A" then
-		 * set the search subarea to the selected subarea 
+		/**
+		 * Event listener for the subareaselect object. If subareaselect is not empty and not set to "N/A", then
+		 * set the search subarea to the selected subarea. 
 		 */
 		subareaselect.setOnAction((e) -> {
 			
@@ -236,9 +276,10 @@ public class UpdatedGUI extends Application {
 			}
 		});
 		
-		/*
-		 * Event listener for the topic combobox, if the topicselect object is not empty and not set to "N/A" then
-		 * set the search topic to the selected topic and execute the update categories commmand
+		/**
+		 * Event listener for the topic combobox. If the topicselect object is not empty and not set to "N/A", then
+		 * set the search topic to the selected topic and execute the update categories commmand by calling
+		 * the updateCategories() method. 
 		 */		
 		topicselect.setOnAction((e) -> {
 			
@@ -255,8 +296,9 @@ public class UpdatedGUI extends Application {
 			}
 		});
 		
-		/*
-		 * Event listener for categoryselect, if categoryselect is not empty and is not "N/A" set the category to selected category 
+		/**
+		 * Event listener for categoryselect. If categoryselect is not empty and is not "N/A", then
+		 * set the category to selected category.
 		 */		
 		categoryselect.setOnAction((e) -> {
 			
@@ -275,9 +317,10 @@ public class UpdatedGUI extends Application {
 		});
 		
 		
-		/*
-		 * Event listener for stateselect, if "Choose a state" is selected, reset the state of the GUI, otherwise
-		 * reset the search and set the state to the new state selected and run the updateAreas method
+		/**
+		 * Event listener for stateselect. If "Choose a state" is selected, then reset the state of the GUI
+		 * Otherwise, reset the search and set the state to the new state selected
+		 * and run the updateAreas() method.
 		 */
 		stateselect.setOnAction((e) -> {
 					
@@ -293,10 +336,12 @@ public class UpdatedGUI extends Application {
 	
 		});
 		
-		/*
-		 * Event listener for the search button
+		/**
+		 * Event listener for the Search button. This event listener executes a search query 
+		 * for a customer's desired search item while also considering selected filters.  
 		 */
 		button.setOnAction((e) -> {
+			
 			if (!this.lastquery.isBlank())
 				this.searchKeywordsPositive.remove(lastquery);
 			String labeltext = this.keywordfield.getText();
@@ -353,6 +398,10 @@ public class UpdatedGUI extends Application {
 	
 	
 	// =============================================== Helper methods =========================================
+	/**
+	 * If a selected state has cities and localities, then update the areaselect selection menu.
+	 * @author Arti Shala, minor updates by Weezha Yahyapoor for converting it to JavaFX
+	 */
 	protected void updateAreas() {
 		
 		if (search.setAreaMap() == false) {
@@ -397,6 +446,10 @@ public class UpdatedGUI extends Application {
 			topicselect.setValue(topicselect.getItems().get(0).toString());
 	}
 	
+	/**
+	 * If a selected state has localities, then update the subareaselect selection menu.
+	 * @author Arti Shala, minor updates by Weezha Yahyapoor for converting it to JavaFX
+	 */
 	protected void updateSubAreas() {
 		String area = search.getArea();
 		System.out.println();
@@ -418,6 +471,10 @@ public class UpdatedGUI extends Application {
 		
 	}
 
+	/**
+	 * If the selected customer topic is found, then update the cateogoryselect selection menu.
+	 * @author Arti Shala, minor updates by Weezha Yahyapoor for converting it to JavaFX
+	 */
 	protected void updateCategories() {
 		if (search.setCategoryMap() == false) {
 			topicselect = new ComboBox<String>();
@@ -437,7 +494,11 @@ public class UpdatedGUI extends Application {
 	}
 	
 	
-	//Checkbox VBOX creator
+	/**
+	 * This VBox contains the UI components to create check box filters and their associated event listeners. 
+	 * @return filterBoxes, a VBox container.
+	 * @author Weezha Yahyapoor
+	 */
 	protected VBox setFiltersCheckBoxes() {
 
  		//Insets(double top, double right, double bottom, double left)
@@ -523,7 +584,7 @@ public class UpdatedGUI extends Application {
 
 
  		//========================== Event handlers ========================================================
- 		/*
+ 		/**
  		 * Event listener for the "has images only CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -541,7 +602,7 @@ public class UpdatedGUI extends Application {
 
  		});
 
- 		/*
+ 		/**
  		 * Event listener for the "Multiple images only CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -559,7 +620,7 @@ public class UpdatedGUI extends Application {
  		});
 
 
- 		/*
+ 		/**
  		 * Event listener for the "Original images only CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -576,7 +637,7 @@ public class UpdatedGUI extends Application {
  			}
  		});
 
- 		/*
+ 		/**
  		 * Event listener for the "Posted today CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -594,7 +655,7 @@ public class UpdatedGUI extends Application {
  			}
  		});
 
- 		/*
+ 		/**
  		 * Event listener for the "Search title only CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -611,7 +672,7 @@ public class UpdatedGUI extends Application {
  			}
  		});
 
- 		/*
+ 		/**
  		 * Event listener for the "Bundle duplicates CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -628,7 +689,7 @@ public class UpdatedGUI extends Application {
  			}
  		});
 
- 		/*
+ 		/**
  		 * Event listener for the "Hide all duplicates CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -645,7 +706,7 @@ public class UpdatedGUI extends Application {
  			}
  		});
 
- 		/*
+ 		/**
  		 * Event listener for the "Has make/model only CheckBox", triggered whenever a change to the state of the check box 
  		 * object changes.
  		 */ 
@@ -667,6 +728,10 @@ public class UpdatedGUI extends Application {
 
  	}
 	
+	/**
+	 * Class used to represent a positive or negative keyword in the GUI table
+	 * @author Weezha Yahyapoor
+	 */
 	class ObjectTable {
 
  		public String keyword = "empty";
@@ -687,6 +752,12 @@ public class UpdatedGUI extends Application {
 
  	}
 	
+	/**
+	 * This BorderPane contains the UI components to create TableView objects and they keyword text fields for
+	 * capturing a user's input. 
+	 * @return pane, a BorderPane container.
+	 * @author Weezha Yahyapoor and Arti Shala
+	 */
 	protected BorderPane setRightPane() {
 
  		BorderPane right = new BorderPane();
@@ -750,7 +821,9 @@ public class UpdatedGUI extends Application {
 
          bTable.getColumns().add(col1b);
 
-         //bTable.getItems().add(new ObjectTable("Test"));
+         /**
+          * Event handlers to capture a user's input for including or excluding a keyword in/from a search query.
+          */
          aButton.setOnAction((e) -> {
         	 if (aField.getText().isBlank()) {
         		 //do nothing
