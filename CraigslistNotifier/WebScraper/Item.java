@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 //Class that represents an item in craigslist
 public class Item {
-	protected String itemName, make, model, description, location, datePosted, dateUpdated, condition, dimensions;
+	protected String itemName, make = "", model = "", description, location, datePosted, dateUpdated, condition, dimensions;
 	protected float itemPrice;
 	protected LocalDateTime dateTimePosted,dateTimeUpdated;
 	protected String itemURL; //change later when URL class is defined
