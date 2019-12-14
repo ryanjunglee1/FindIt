@@ -191,15 +191,22 @@ public class SearchQuery {
 											item.isNull = true;
 											System.out.println("Item invalidated!");
 									}
+									if (this.searchTitlesOnly == true) {
+										for (String pk : this.searchKeywordsPositive) {
+											if (!item.itemName.toLowerCase().contains(pk.toLowerCase()) && !pk.isBlank()) {
+												item.isNull = true;
+											}
+										}
+									}
 									if (this.searchKeywordsNegative.length != 0) {
 										for (String p : this.searchKeywordsNegative) {
-											if (this.searchTitlesOnly) {
-												if (item.itemName.contains(p)) {
+											if (this.searchTitlesOnly == true) {
+												if (item.itemName.toLowerCase().contains(p.toLowerCase())) {
 													item.isNull = true;
 												}
 											}
 											else {
-												if (item.itemName.contains(p) || item.description.contains(p)) {
+												if (item.itemName.toLowerCase().contains(p.toLowerCase()) || item.description.toLowerCase().contains(p.toLowerCase())) {
 													item.isNull = true;
 												}
 											}
