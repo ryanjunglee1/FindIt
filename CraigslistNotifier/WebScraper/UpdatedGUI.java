@@ -358,7 +358,7 @@ public class UpdatedGUI extends Application {
 			this.checkBoxMap.put("searchTitlesOnly",(this.searchTitlesOnly == null) ? false : this.searchTitlesOnly);
 			this.checkBoxMap.put("bundleDuplicates",false);
 			this.checkBoxMap.put("hideAllDuplicates",false);
-			this.checkBoxMap.put("hasMakeModelOnly",false);
+			this.checkBoxMap.put("hasMakeModelOnly",this.hasMakeModelOnly);
 			this.checkBoxMap.put("hasPhoneOnly",false);
 			this.checkBoxMap.put("cryptoAccepted",false);
 			this.checkBoxMap.put("deliveryAvailable",false);
@@ -715,11 +715,11 @@ public class UpdatedGUI extends Application {
 
  			// add functionality here
  			if (chasMakeModelOnly.isSelected()) {
-
+ 				this.hasMakeModelOnly = true;
  				System.out.println("Has make/model was selected");
 
  			} else {
-
+ 				this.hasMakeModelOnly = false;
  				// do nothing
  			}
  		});

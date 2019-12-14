@@ -198,6 +198,11 @@ public class SearchQuery {
 											}
 										}
 									}
+									if (this.hasMakeModelOnly == true) {
+										System.out.println("MAKEMODELTRUE");
+										if (item.make.isBlank() && item.model.isBlank())
+											item.isNull = true;
+									}
 									if (this.searchKeywordsNegative.length != 0) {
 										for (String p : this.searchKeywordsNegative) {
 											if (this.searchTitlesOnly == true) {

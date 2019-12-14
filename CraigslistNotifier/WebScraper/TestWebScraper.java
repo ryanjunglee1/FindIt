@@ -52,8 +52,10 @@ public class TestWebScraper {
     	System.out.println(sender.sendMail());
 
 	*/
-    	Item i = new Item("https://washingtondc.craigslist.org/doc/art/d/washington-set-of-47-clip-frames-8x10/7031775886.html");
-    	//System.out.println(i.description);
+    	Item i = new Item("https://washingtondc.craigslist.org/doc/ele/d/hyattsville-gopro-hero-5-black-bundle/7034836206.html");
+    	System.out.println(i.make + " " + i.model);
+    	
+    	System.out.println(i.model.isBlank() && i.make.isBlank());
     	
     }
 }
