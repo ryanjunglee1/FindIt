@@ -349,7 +349,8 @@ public class UpdatedGUI extends Application {
 			if (!this.searchKeywordsPositive.contains(labeltext)) {
 				this.searchKeywordsPositive.add(labeltext);
 			}
-			String[] guiTest = this.searchKeywordsPositive.toArray(new String[0]);
+			String[] poswords = this.searchKeywordsPositive.toArray(new String[0]);
+			String[] negwords = this.searchKeywordsNegative.toArray(new String[0]);
 			this.checkBoxMap.put("hasImages", (this.hasImage == null) ? false : this.hasImage);
 			this.checkBoxMap.put("multipleImagesOnly", (this.multipleImagesOnly == null) ? false : this.multipleImagesOnly);
 			this.checkBoxMap.put("originalImagesOnly", (this.originalImagesOnly == null) ? false : this.originalImagesOnly);
@@ -380,7 +381,7 @@ public class UpdatedGUI extends Application {
 							str += " max price: $" + options.getMaxPrice();
 						System.out.println(str);
 
-						SearchQuery q = new SearchQuery(guiTest, options, search);
+						SearchQuery q = new SearchQuery(poswords, negwords, options, search);
 				try {
 					q.getSearch();
 				} catch (NullPointerException z) {
@@ -846,7 +847,7 @@ public class UpdatedGUI extends Application {
         	 this.searchKeywordsPositive.clear();
          });
          bClear.setOnAction((e) -> {
-        	 aTable.getItems().clear();
+        	 bTable.getItems().clear();
         	 this.searchKeywordsNegative.clear();
          });
          VBox bVBox = new VBox(bBox, bTable);
