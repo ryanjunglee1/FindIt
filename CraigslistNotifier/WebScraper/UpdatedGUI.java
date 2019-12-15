@@ -56,9 +56,9 @@ public class UpdatedGUI extends Application {
 	private HashMap<String,Boolean> checkBoxMap = new HashMap<String,Boolean>();
 	private Boolean hasImage, multipleImagesOnly, postedToday, searchTitlesOnly, bundleDuplicates, 
 	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable = false; 
-	protected ArrayList<String> searchKeywordsPositive = new ArrayList<String>();
-	protected ArrayList<String> searchKeywordsNegative = new ArrayList<String>();
-	public String lastquery = "";
+	private ArrayList<String> searchKeywordsPositive = new ArrayList<String>();
+	private ArrayList<String> searchKeywordsNegative = new ArrayList<String>();
+	private String lastquery = "";
 	
 	@Override
 	public void start(Stage primaryStage) {

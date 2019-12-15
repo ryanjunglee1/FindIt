@@ -17,41 +17,41 @@ import java.util.Scanner;
 
 //Class that represents an item in craigslist
 public class Item {
-	protected String itemName, make = "", model = "", description, location, datePosted, dateUpdated, condition = "", dimensions;
-	protected float itemPrice;
-	protected LocalDateTime dateTimePosted,dateTimeUpdated;
-	protected String itemURL; //change later when URL class is defined
-	protected URI itemURI;
-	protected ArrayList<String> itemThumbs, itemPicsFull; //change later to arraylist of URL 
-	protected String fullsizeimg;
-	protected Document website;
-	protected boolean hasImages, hasMultipleImages;
-	protected boolean isNull;
-	protected String postID;
+	private String itemName, make = "", model = "", description, location, datePosted, dateUpdated, condition = "", dimensions;
+	private float itemPrice;
+	private LocalDateTime dateTimePosted,dateTimeUpdated;
+	private String itemURL; //change later when URL class is defined
+	private URI itemURI;
+	private ArrayList<String> itemThumbs, itemPicsFull; //change later to arraylist of URL 
+	private String fullsizeimg;
+	private Document website;
+	private boolean hasImages, hasMultipleImages;
+	private boolean isNull;
+	private String postID;
 	
 	public Item(String itemURL) throws NumberFormatException, IOException {
 		try {
-			this.itemURL = itemURL;
+			this.setItemURL(itemURL);
 			this.website = Jsoup.connect(itemURL).get();
-			this.itemName = removeFormats(website.getElementById("titletextonly").html());
-			this.description = removeFormats(website.getElementById("postingbody").html());
+			this.setItemName(removeFormats(website.getElementById("titletextonly").html()));
+			this.setDescription(removeFormats(website.getElementById("postingbody").html()));
 			this.cleanDescription();
-			this.itemURI = URI.create(this.itemURL);
+			this.itemURI = URI.create(this.getItemURL());
 			try {
-				this.itemPrice = Float.parseFloat(website.getElementsByClass("price").first().html().substring(1));
+				this.setItemPrice(Float.parseFloat(website.getElementsByClass("price").first().html().substring(1)));
 			} catch (NullPointerException e) {
-				this.itemPrice = 0.00f;
+				this.setItemPrice(0.00f);
 			}
 			try {
 				Element attrGroup = website.getElementsByClass("attrgroup").first();
 				for (Element element: attrGroup.children()) {
 					String contents = element.html();
 					if (contents.contains("condition: "))
-						condition = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+						setCondition(contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>")));
 					else if (contents.contains("make / manufacturer: "))
-						make = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+						setMake(contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>")));
 					else if (contents.contains("model name / number: "))
-						model = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
+						setModel(contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>")));
 					else if (contents.contains("size / dimensions: "))
 						dimensions = contents.substring(contents.indexOf("<b>") + 3, contents.indexOf("</b>"));
 				}
@@ -95,13 +95,13 @@ public class Item {
 				try {
 					String rawtimeupdate = times.get(1).html();
 					rawtimeupdate = rawtimeupdate.substring(0,10) + "T" + rawtimeupdate.substring(11) + ":00";
-					this.dateTimeUpdated = LocalDateTime.parse(rawtimeupdate);
+					this.setDateTimeUpdated(LocalDateTime.parse(rawtimeupdate));
 				} catch (IndexOutOfBoundsException ib) {
-					this.dateTimeUpdated = LocalDateTime.parse(rawtimepost);
+					this.setDateTimeUpdated(LocalDateTime.parse(rawtimepost));
 				}
-				this.dateTimePosted = LocalDateTime.parse(rawtimepost);
+				this.setDateTimePosted(LocalDateTime.parse(rawtimepost));
 				
-				System.out.println(this.dateTimePosted.toString() + " " + this.dateTimeUpdated);
+				System.out.println(this.getDateTimePosted().toString() + " " + this.getDateTimeUpdated());
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -110,52 +110,52 @@ public class Item {
 			try {
 				//System.out.println(website.toString());
 				Elements images = website.getElementsByTag("img");
-				this.itemThumbs = new ArrayList<String>();
-				this.fullsizeimg = images.get(0).attr("src");
+				this.setItemThumbs(new ArrayList<String>());
+				this.setFullsizeimg(images.get(0).attr("src"));
 				for (int i = 0; i < images.size(); i++) {
 					if (i != 0 && !images.get(i).equals(null)) {
 						try {
 							String imgtag = images.get(i).attr("src");
-							this.itemThumbs.add(imgtag);
+							this.getItemThumbs().add(imgtag);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 				}
 				//System.out.println("Fullsize: " + this.fullsizeimg);
-				for (String s : this.itemThumbs) {
+				for (String s : this.getItemThumbs()) {
 					//System.out.println(s);
 				}
-				this.hasImages = true;
-				if (!this.itemThumbs.isEmpty())
-					this.hasMultipleImages = true;
+				this.setHasImages(true);
+				if (!this.getItemThumbs().isEmpty())
+					this.setHasMultipleImages(true);
 				else
-					this.hasMultipleImages = false;
+					this.setHasMultipleImages(false);
 				
 			} catch (NullPointerException e) {
 				//System.out.println("no images, null pointer");
-				this.hasImages = false;
-				this.hasMultipleImages = false;
+				this.setHasImages(false);
+				this.setHasMultipleImages(false);
 			} catch (IndexOutOfBoundsException o) {
 				//System.out.println("no images, out of bounds");
-				this.hasImages = false;
-				this.hasMultipleImages = false;
+				this.setHasImages(false);
+				this.setHasMultipleImages(false);
 			}
-			isNull = false;
+			setNull(false);
 		} catch (NullPointerException z) {
 			System.out.println("item deleted or expired");
-			isNull = true;
+			setNull(true);
 		}
 	}
 	
 	public Item(String name, String description) {
-		this.itemName = name;
-		this.description = description;
+		this.setItemName(name);
+		this.setDescription(description);
 	}
 	
 	@Override
 	public String toString() {
-		return this.itemName + " $" + this.itemPrice;
+		return this.getItemName() + " $" + this.getItemPrice();
 	}
 	
 	public void openPage() {
@@ -175,7 +175,7 @@ public class Item {
 		if (!this.itemURI.equals(null)) {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			    try {
-					Desktop.getDesktop().browse(new URI(this.fullsizeimg));
+					Desktop.getDesktop().browse(new URI(this.getFullsizeimg()));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -196,7 +196,203 @@ public class Item {
 	}
 	
 	public void cleanDescription() {
-		this.description = this.description.replaceAll("\\<.*?\\>", "");
-		this.description = this.description.replace("QR Code Link to This Post", "");
+		this.setDescription(this.getDescription().replaceAll("\\<.*?\\>", ""));
+		this.setDescription(this.getDescription().replace("QR Code Link to This Post", ""));
+	}
+
+	/**
+	 * @return the hasImages
+	 */
+	public boolean isHasImages() {
+		return hasImages;
+	}
+
+	/**
+	 * @param hasImages the hasImages to set
+	 */
+	public void setHasImages(boolean hasImages) {
+		this.hasImages = hasImages;
+	}
+
+	/**
+	 * @return the isNull
+	 */
+	public boolean isNull() {
+		return isNull;
+	}
+
+	/**
+	 * @param isNull the isNull to set
+	 */
+	public void setNull(boolean isNull) {
+		this.isNull = isNull;
+	}
+
+	/**
+	 * @return the hasMultipleImages
+	 */
+	public boolean isHasMultipleImages() {
+		return hasMultipleImages;
+	}
+
+	/**
+	 * @param hasMultipleImages the hasMultipleImages to set
+	 */
+	public void setHasMultipleImages(boolean hasMultipleImages) {
+		this.hasMultipleImages = hasMultipleImages;
+	}
+
+	/**
+	 * @return the dateTimePosted
+	 */
+	public LocalDateTime getDateTimePosted() {
+		return dateTimePosted;
+	}
+
+	/**
+	 * @param dateTimePosted the dateTimePosted to set
+	 */
+	public void setDateTimePosted(LocalDateTime dateTimePosted) {
+		this.dateTimePosted = dateTimePosted;
+	}
+
+	/**
+	 * @return the itemName
+	 */
+	public String getItemName() {
+		return itemName;
+	}
+
+	/**
+	 * @param itemName the itemName to set
+	 */
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	/**
+	 * @return the make
+	 */
+	public String getMake() {
+		return make;
+	}
+
+	/**
+	 * @param make the make to set
+	 */
+	public void setMake(String make) {
+		this.make = make;
+	}
+
+	/**
+	 * @return the model
+	 */
+	public String getModel() {
+		return model;
+	}
+
+	/**
+	 * @param model the model to set
+	 */
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the itemPrice
+	 */
+	public float getItemPrice() {
+		return itemPrice;
+	}
+
+	/**
+	 * @param itemPrice the itemPrice to set
+	 */
+	public void setItemPrice(float itemPrice) {
+		this.itemPrice = itemPrice;
+	}
+
+	/**
+	 * @return the itemURL
+	 */
+	public String getItemURL() {
+		return itemURL;
+	}
+
+	/**
+	 * @param itemURL the itemURL to set
+	 */
+	public void setItemURL(String itemURL) {
+		this.itemURL = itemURL;
+	}
+
+	/**
+	 * @return the dateTimeUpdated
+	 */
+	public LocalDateTime getDateTimeUpdated() {
+		return dateTimeUpdated;
+	}
+
+	/**
+	 * @param dateTimeUpdated the dateTimeUpdated to set
+	 */
+	public void setDateTimeUpdated(LocalDateTime dateTimeUpdated) {
+		this.dateTimeUpdated = dateTimeUpdated;
+	}
+
+	/**
+	 * @return the condition
+	 */
+	public String getCondition() {
+		return condition;
+	}
+
+	/**
+	 * @param condition the condition to set
+	 */
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
+	/**
+	 * @return the itemThumbs
+	 */
+	public ArrayList<String> getItemThumbs() {
+		return itemThumbs;
+	}
+
+	/**
+	 * @param itemThumbs the itemThumbs to set
+	 */
+	public void setItemThumbs(ArrayList<String> itemThumbs) {
+		this.itemThumbs = itemThumbs;
+	}
+
+	/**
+	 * @return the fullsizeimg
+	 */
+	public String getFullsizeimg() {
+		return fullsizeimg;
+	}
+
+	/**
+	 * @param fullsizeimg the fullsizeimg to set
+	 */
+	public void setFullsizeimg(String fullsizeimg) {
+		this.fullsizeimg = fullsizeimg;
 	}
 }

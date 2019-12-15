@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 
 public class WebScraper {
-	protected Document website;
-	protected Search search;
-	protected Scanner scan;
+	private Document website;
+	private Search search;
+	private Scanner scan;
 
 	public WebScraper(Search search, Scanner scan) {
 		this.search = search;
@@ -28,15 +28,15 @@ public class WebScraper {
 				subArea += search.getSubAreaMap().get(search.getSubArea()) + "/";
 			}
 			if (!search.getCategory().equals("")) {
-				website = Jsoup.connect(search.getWebsite().location() + "/search/" + subArea + search.getCategoryMap().get(search.getCategory())  + "?").get();
+				setWebsite(Jsoup.connect(search.getWebsite().location() + "/search/" + subArea + search.getCategoryMap().get(search.getCategory())  + "?").get());
 			}
 			else if (!search.getTopic().equals(""))
-				website = Jsoup.connect(search.getWebsite().location() + "/search/" + subArea + search.getTopicMap().get(search.getTopic()) + "?").get();
+				setWebsite(Jsoup.connect(search.getWebsite().location() + "/search/" + subArea + search.getTopicMap().get(search.getTopic()) + "?").get());
 			else
 				throw new Exception("Not a topic or category");
 		}
 		catch(IOException e) {
-			website = null;
+			setWebsite(null);
 			System.out.println("Website not found.");
 		}
 		catch (Exception e) {
@@ -117,14 +117,28 @@ public class WebScraper {
 
 	@Override
 	public String toString() {
-		if (website == null)
+		if (getWebsite() == null)
 			return "No such website";
 
 		StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter(stringWriter);
 
-		printWriter.printf("Website URL: %s\nWebsite Name: %s\nState: %s\nArea: %s\nSub Area: %s\nTopic: %s\nCategory: %s\n", website.location(), website.title(), search.getState(), search.getArea(), search.getSubArea(), search.getTopic(), search.getCategory());
+		printWriter.printf("Website URL: %s\nWebsite Name: %s\nState: %s\nArea: %s\nSub Area: %s\nTopic: %s\nCategory: %s\n", getWebsite().location(), getWebsite().title(), search.getState(), search.getArea(), search.getSubArea(), search.getTopic(), search.getCategory());
 
 		return stringWriter.toString();
+	}
+
+	/**
+	 * @return the website
+	 */
+	public Document getWebsite() {
+		return website;
+	}
+
+	/**
+	 * @param website the website to set
+	 */
+	public void setWebsite(Document website) {
+		this.website = website;
 	}
 }
