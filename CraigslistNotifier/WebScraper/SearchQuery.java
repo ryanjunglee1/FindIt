@@ -210,6 +210,18 @@ public class SearchQuery {
 											}
 										}
 									}
+									if (this.hideAllDuplicates == true) {
+										ArrayList<Item> scheduledforremoval = new ArrayList<Item>();
+										for (Item it : itemarraylist) {
+											if (item.itemName.contentEquals(it.itemName) || item.description.contentEquals(it.description)) {
+												item.isNull = true;
+												scheduledforremoval.add(it);
+											}
+										}
+										for (Item r : scheduledforremoval) {
+											itemarraylist.remove(r);
+										}
+									}
 									if (this.searchKeywordsNegative.length != 0) {
 										for (String p : this.searchKeywordsNegative) {
 											if (this.searchTitlesOnly == true) {
