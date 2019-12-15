@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 /*
  * This class is used to contain an arrayList of items , the SearchQuery used to get those items, and update methods
@@ -74,12 +76,22 @@ public class SearchResult {
 		table = new JTable(makeData(), columnNames);
 		table.setModel(new ItemTableModel(this));
 		table.addMouseListener(new JTableButtonMouseListener(this.table));
+		TableColumnModel tcmodel = table.getColumnModel();
+		tcmodel.getColumn(0).setPreferredWidth(250);
+		tcmodel.getColumn(1).setPreferredWidth(75);
+		tcmodel.getColumn(2).setPreferredWidth(350);
+		tcmodel.getColumn(3).setPreferredWidth(100);
+		tcmodel.getColumn(4).setPreferredWidth(600);
+		tcmodel.getColumn(5).setPreferredWidth(200);
+		table.setRowHeight(35);
 		
 		//scrollpanel created and table added to scroll panel with button cell renderer
-		scrollpane = new JScrollPane(table);
+		scrollpane = new JScrollPane(table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		table.setFillsViewportHeight(true);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
 		table.getColumn("Show in CL").setCellRenderer(buttonRenderer);
+		table.getColumn("Image Preview").setCellRenderer(buttonRenderer);
 		
 		//notification panel elements populated
 		notificationPanel.add(label);
@@ -158,7 +170,7 @@ public class SearchResult {
 		frame.add(container);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle(title);
-        frame.setSize(500, 650);
+        frame.setSize(600, 650);
         //frame.pack();
         frame.setVisible(true);
 		
@@ -238,13 +250,29 @@ public class SearchResult {
 	}
 	
 	public Object[][] makeData() {
-		Object[][] data = new Object[this.itemList.size()][3];
+		Object[][] data = new Object[this.itemList.size()][7];
 		for (int i = 0; i < this.itemList.size(); i++) {
 			Item it = this.itemList.get(i);
 			data[i][0] = it.itemName;
 			String myItemPrice = "" + it.itemPrice;
 			data[i][1] = "$" + (myItemPrice.indexOf('.') > myItemPrice.length() - 3 ? myItemPrice + "0" : myItemPrice);
-			data[i][2] = new JButton();
+			data[i][2] = (it.make.contentEquals("") ? "" : "Make: " + it.make + "/") + 
+					(it.model.contentEquals("") ? "" : "Model: " + it.model + "/") + 
+					(it.condition.contentEquals("") ? "" : "Condition: " + it.condition); 
+			data[i][3] = new JButton();
+			try {
+				data[i][4] = it.description.substring(0,100);
+			} catch (Exception e) {
+				data[i][4] = it.description;
+			}
+			try {
+			data[i][5] = it.itemThumbs.get(0);
+			data[i][6] = it.fullsizeimg;
+			} catch (Exception e) {
+				data[i][5] = "";
+				data[i][6]= "";
+			}
+					
 		}
 		return data;
 	}
