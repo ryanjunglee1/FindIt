@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 //Class that represents an item in craigslist
 public class Item {
-	protected String itemName, make = "", model = "", description, location, datePosted, dateUpdated, condition, dimensions;
+	protected String itemName, make = "", model = "", description, location, datePosted, dateUpdated, condition = "", dimensions;
 	protected float itemPrice;
 	protected LocalDateTime dateTimePosted,dateTimeUpdated;
 	protected String itemURL; //change later when URL class is defined
@@ -163,6 +163,19 @@ public class Item {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			    try {
 					Desktop.getDesktop().browse(this.itemURI);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void openFullImg() throws URISyntaxException {
+		if (!this.itemURI.equals(null)) {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			    try {
+					Desktop.getDesktop().browse(new URI(this.fullsizeimg));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
