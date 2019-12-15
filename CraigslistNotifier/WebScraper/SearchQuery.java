@@ -203,6 +203,13 @@ public class SearchQuery {
 										if (item.make.isBlank() && item.model.isBlank())
 											item.isNull = true;
 									}
+									if (this.bundleDuplicates == true) {
+										for (Item it : itemarraylist) {
+											if (item.itemName.contentEquals(it.itemName) || item.description.contains(it.description)) {
+												item.isNull = true;
+											}
+										}
+									}
 									if (this.searchKeywordsNegative.length != 0) {
 										for (String p : this.searchKeywordsNegative) {
 											if (this.searchTitlesOnly == true) {

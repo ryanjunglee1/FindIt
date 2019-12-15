@@ -356,9 +356,9 @@ public class UpdatedGUI extends Application {
 			this.checkBoxMap.put("originalImagesOnly", (this.originalImagesOnly == null) ? false : this.originalImagesOnly);
 			this.checkBoxMap.put("postedToday", (this.postedToday == null) ? false : this.postedToday);
 			this.checkBoxMap.put("searchTitlesOnly",(this.searchTitlesOnly == null) ? false : this.searchTitlesOnly);
-			this.checkBoxMap.put("bundleDuplicates",false);
-			this.checkBoxMap.put("hideAllDuplicates",false);
-			this.checkBoxMap.put("hasMakeModelOnly",this.hasMakeModelOnly);
+			this.checkBoxMap.put("bundleDuplicates", (this.bundleDuplicates == null) ? false : this.bundleDuplicates);
+			this.checkBoxMap.put("hideAllDuplicates",(this.hideAllDuplicates == null) ? false : this.hideAllDuplicates);
+			this.checkBoxMap.put("hasMakeModelOnly", (this.hasMakeModelOnly == null) ? false : this.hasMakeModelOnly);
 			this.checkBoxMap.put("hasPhoneOnly",false);
 			this.checkBoxMap.put("cryptoAccepted",false);
 			this.checkBoxMap.put("deliveryAvailable",false);
@@ -681,11 +681,11 @@ public class UpdatedGUI extends Application {
 
  			// add functionality here
  			if (cBundleDuplicates.isSelected()) {
-
+ 				this.bundleDuplicates = true;
  				System.out.println("Bundle duplicates was selected");
 
  			} else {
-
+ 				this.bundleDuplicates = false;
  				// do nothing
  			}
  		});
@@ -698,11 +698,11 @@ public class UpdatedGUI extends Application {
 
  			// add functionality here
  			if (cHideAllDuplicates.isSelected()) {
-
+ 				this.hideAllDuplicates = true;
  				System.out.println("Hide all duplicates was selected");
 
  			} else {
-
+ 				this.hideAllDuplicates = false;
  				// do nothing
  			}
  		});
