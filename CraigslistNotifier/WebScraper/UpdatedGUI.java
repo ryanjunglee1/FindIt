@@ -54,7 +54,7 @@ public class UpdatedGUI extends Application {
 	private TextField maxPriceField = new TextField();
 	private Button button = new Button("Search");
 	private HashMap<String,Boolean> checkBoxMap = new HashMap<String,Boolean>();
-	private Boolean hasImage, multipleImagesOnly, originalImagesOnly, postedToday, searchTitlesOnly, bundleDuplicates, 
+	private Boolean hasImage, multipleImagesOnly, postedToday, searchTitlesOnly, bundleDuplicates, 
 	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable = false; 
 	protected ArrayList<String> searchKeywordsPositive = new ArrayList<String>();
 	protected ArrayList<String> searchKeywordsNegative = new ArrayList<String>();
@@ -353,7 +353,6 @@ public class UpdatedGUI extends Application {
 			String[] negwords = this.searchKeywordsNegative.toArray(new String[0]);
 			this.checkBoxMap.put("hasImages", (this.hasImage == null) ? false : this.hasImage);
 			this.checkBoxMap.put("multipleImagesOnly", (this.multipleImagesOnly == null) ? false : this.multipleImagesOnly);
-			this.checkBoxMap.put("originalImagesOnly", (this.originalImagesOnly == null) ? false : this.originalImagesOnly);
 			this.checkBoxMap.put("postedToday", (this.postedToday == null) ? false : this.postedToday);
 			this.checkBoxMap.put("searchTitlesOnly",(this.searchTitlesOnly == null) ? false : this.searchTitlesOnly);
 			this.checkBoxMap.put("bundleDuplicates", (this.bundleDuplicates == null) ? false : this.bundleDuplicates);
@@ -528,15 +527,6 @@ public class UpdatedGUI extends Application {
  		bHasMultImagesOnly.setLeft(hasMultImagesOnly);
  		bHasMultImagesOnly.setRight(cHasMultImagesOnly);
 
-
- 		// original images only
- 		Label hasOrigImagesOnly = new Label("Original images only:");
- 		CheckBox cHasOrigImagesOnly = new CheckBox();
- 		BorderPane bHasOrigImagesOnly = new BorderPane();
- 		bHasOrigImagesOnly.setPadding(new Insets(2,5,0,5));
- 		bHasOrigImagesOnly.setLeft(hasOrigImagesOnly);
- 		bHasOrigImagesOnly.setRight(cHasOrigImagesOnly);
-
  		// posted today
  		Label postedToday = new Label("Posted today:");
  		CheckBox cPostedToday = new CheckBox();
@@ -579,7 +569,7 @@ public class UpdatedGUI extends Application {
  		bHasMakeModelOnly.setRight(chasMakeModelOnly);
 
  		VBox filterBoxes = new VBox(filterCheckBoxes, filterLabel, bHasImagesOnly, bHasMultImagesOnly,
- 				                    bHasOrigImagesOnly, bSearchTitleOnly, bPostedToday, bBundleDuplicates, 
+ 				                   	bSearchTitleOnly, bPostedToday, bBundleDuplicates, 
  				                    bHideAllDuplicates, bHasMakeModelOnly);
  		//filterBoxes.setStyle("-fx-border-color: red; -fx-background-color: lightgray;");
 
@@ -620,23 +610,6 @@ public class UpdatedGUI extends Application {
  			}
  		});
 
-
- 		/**
- 		 * Event listener for the "Original images only CheckBox", triggered whenever a change to the state of the check box 
- 		 * object changes.
- 		 */ 
- 		cHasOrigImagesOnly.setOnAction((e) -> {
-
- 			// add functionality here
- 			if (cHasOrigImagesOnly.isSelected()) {
-
- 				System.out.println("Original images only was selected");
-
- 			} else {
-
- 				// do nothing
- 			}
- 		});
 
  		/**
  		 * Event listener for the "Posted today CheckBox", triggered whenever a change to the state of the check box 
