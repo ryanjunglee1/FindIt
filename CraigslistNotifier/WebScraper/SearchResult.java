@@ -42,13 +42,13 @@ import javax.swing.table.TableColumnModel;
  */
 public class SearchResult {
 	//data fields
-	protected ArrayList<Item> itemList;
-	protected int resultSize;
-	protected SearchQuery query;
-	protected int updateInterval;
-	protected LocalDateTime lastUpdated, nextUpdate;
-	protected boolean willUpdate;
-	protected String updateEmail;
+	private ArrayList<Item> itemList;
+	private int resultSize;
+	private SearchQuery query;
+	private int updateInterval;
+	private LocalDateTime lastUpdated, nextUpdate;
+	private boolean willUpdate;
+	private String updateEmail;
 	int count = 0;
 	
 	//GUI elements
@@ -183,9 +183,17 @@ public class SearchResult {
 		this.itemList = items;
 		table.removeAll();
 		table.setModel(new ItemTableModel(this));
+		TableColumnModel tcmodel = table.getColumnModel();
+		tcmodel.getColumn(0).setPreferredWidth(250);
+		tcmodel.getColumn(1).setPreferredWidth(75);
+		tcmodel.getColumn(2).setPreferredWidth(350);
+		tcmodel.getColumn(3).setPreferredWidth(100);
+		tcmodel.getColumn(4).setPreferredWidth(600);
+		tcmodel.getColumn(5).setPreferredWidth(200);
 		table.addMouseListener(new JTableButtonMouseListener(this.table));
 		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
 		table.getColumn("Show in CL").setCellRenderer(buttonRenderer);
+		table.getColumn("Image Preview").setCellRenderer(buttonRenderer);
 		this.lastUpdated = LocalDateTime.now();
 		System.out.println("Last updated: " + this.lastUpdated.toString());
 		for (Item  i : this.itemList) {
@@ -198,16 +206,16 @@ public class SearchResult {
 				newItems.add(i);
 		}
 		System.out.println("--------NEW ITEMS----------");
-		String emailsubject = "Your " + this.query.search.getState() + " " + this.query.search.getCategory() + " search has new items!";
+		String emailsubject = "Your " + this.query.getSearchObject().getState() + " " + this.query.getSearchObject().getCategory() + " search has new items!";
 		String emailbody = "";
 		for (Item i : newItems) {
 			System.out.println("-----------");
-			System.out.println("Item: " + i.toString() + " post date: " + i.dateTimePosted + " update date: " + i.dateTimeUpdated);
+			System.out.println("Item: " + i.toString() + " post date: " + i.getDateTimePosted() + " update date: " + i.getDateTimeUpdated());
 			System.out.println("original time: " + originalUpdateTime.toString());
 			System.out.println("-----------");
 			try {
-			emailbody = emailbody + i.itemName + " $" + i.itemPrice + "\n Posted: " + i.dateTimePosted.toString() + "\n" +
-					i.itemURL + "\n" + "\n";
+			emailbody = emailbody + i.getItemName() + " $" + i.getItemPrice() + "\n Posted: " + i.getDateTimePosted().toString() + "\n" +
+					i.getItemURL() + "\n" + "\n";
 			} catch (NullPointerException z) {
 				z.printStackTrace();
 			}
@@ -253,21 +261,21 @@ public class SearchResult {
 		Object[][] data = new Object[this.itemList.size()][7];
 		for (int i = 0; i < this.itemList.size(); i++) {
 			Item it = this.itemList.get(i);
-			data[i][0] = it.itemName;
-			String myItemPrice = "" + it.itemPrice;
+			data[i][0] = it.getItemName();
+			String myItemPrice = "" + it.getItemPrice();
 			data[i][1] = "$" + (myItemPrice.indexOf('.') > myItemPrice.length() - 3 ? myItemPrice + "0" : myItemPrice);
-			data[i][2] = (it.make.contentEquals("") ? "" : "Make: " + it.make + "/") + 
-					(it.model.contentEquals("") ? "" : "Model: " + it.model + "/") + 
-					(it.condition.contentEquals("") ? "" : "Condition: " + it.condition); 
+			data[i][2] = (it.getMake().contentEquals("") ? "" : "Make: " + it.getMake() + "/") + 
+					(it.getModel().contentEquals("") ? "" : "Model: " + it.getModel() + "/") + 
+					(it.getCondition().contentEquals("") ? "" : "Condition: " + it.getCondition()); 
 			data[i][3] = new JButton();
 			try {
-				data[i][4] = it.description.substring(0,100);
+				data[i][4] = it.getDescription().substring(0,100);
 			} catch (Exception e) {
-				data[i][4] = it.description;
+				data[i][4] = it.getDescription();
 			}
 			try {
-			data[i][5] = it.itemThumbs.get(0);
-			data[i][6] = it.fullsizeimg;
+			data[i][5] = it.getItemThumbs().get(0);
+			data[i][6] = it.getFullsizeimg();
 			} catch (Exception e) {
 				data[i][5] = "";
 				data[i][6]= "";

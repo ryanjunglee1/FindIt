@@ -53,9 +53,9 @@ public class TestWebScraper {
 
 	*/
     	Item i = new Item("https://washingtondc.craigslist.org/doc/ele/d/hyattsville-gopro-hero-5-black-bundle/7034836206.html");
-    	System.out.println(i.make + " " + i.model);
+    	System.out.println(i.getMake() + " " + i.getModel());
     	
-    	System.out.println(i.model.isBlank() && i.make.isBlank());
+    	System.out.println(i.getModel().isBlank() && i.getMake().isBlank());
     	
     }
 }

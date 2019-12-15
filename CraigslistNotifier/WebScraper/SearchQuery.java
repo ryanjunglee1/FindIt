@@ -22,15 +22,15 @@ import org.jsoup.nodes.Attributes;
  * @see Item, WebScraper, Search, Options
  */
 public class SearchQuery {
-	protected Search search;
-	protected String[] searchKeywordsPositive, searchKeywordsNegative;
-	protected String sellerType, makeSearch, modelSearch, conditionSearch; //Define sellerType and conditionSearch enum for dropdown list;
-	protected Boolean hasImage , multipleImagesOnly , originalImagesOnly, postedToday , searchTitlesOnly, bundleDuplicates ,
+	private Search search;
+	private String[] searchKeywordsPositive, searchKeywordsNegative;
+	private String sellerType, makeSearch, modelSearch, conditionSearch; //Define sellerType and conditionSearch enum for dropdown list;
+	private Boolean hasImage , multipleImagesOnly , originalImagesOnly, postedToday , searchTitlesOnly, bundleDuplicates ,
 	hideAllDuplicates, hasMakeModelOnly, hasPhoneOnly, cryptoAccepted, deliveryAvailable;
-	protected int milerange, zipcode, descriptionLengthMin, descriptionLengthMax;
-	protected float minPrice, maxPrice;
-	protected LocalTime startDate,endDate;
-	protected WebScraper scraper;
+	private int milerange, zipcode, descriptionLengthMin, descriptionLengthMax;
+	private float minPrice, maxPrice;
+	private LocalTime startDate,endDate;
+	private WebScraper scraper;
 	
 	/*
 	 * Accepts an array of keywords to search with, and creates a new webscraper from the default search provided
@@ -38,7 +38,7 @@ public class SearchQuery {
 	 * @param Search search is the default search that includes required parameters like area, subarea, and topic before keywords
 	 */
 	public SearchQuery(String[] keywords, String[] negwords , Options options, Search search) {
-		this.search = search; 
+		this.setSearchObject(search); 
 		this.searchKeywordsPositive = keywords;
 		this.searchKeywordsNegative = negwords;
 		this.removedupekeywords();
@@ -141,7 +141,7 @@ public class SearchQuery {
 	}
 	
 	public ArrayList<Item> updateSearch() {
-		String baseURL = scraper.website.location();
+		String baseURL = scraper.getWebsite().location();
 		String[] keywordURL = new String[this.searchKeywordsPositive.length];
 		ArrayList<Item> itemarraylist = new ArrayList<Item>();
 		for (int i = 0; i < keywordURL.length; i++) {
@@ -180,41 +180,41 @@ public class SearchQuery {
 							if (!s.isEmpty()) {
 								Item item = new Item(s);
 								try {
-									if ((this.hasImage == true) && item.hasImages == false )
-										item.isNull = true;
-									if ((this.multipleImagesOnly == true) && item.hasMultipleImages == false)
-										item.isNull = true;
+									if ((this.hasImage == true) && item.isHasImages() == false )
+										item.setNull(true);
+									if ((this.multipleImagesOnly == true) && item.isHasMultipleImages() == false)
+										item.setNull(true);
 									if (this.postedToday == true) {
-										LocalDateTime postdate = item.dateTimePosted;
+										LocalDateTime postdate = item.getDateTimePosted();
 										LocalDateTime oldestAllowed = LocalDateTime.now().minusDays(1);
 										if (postdate.isBefore(oldestAllowed))
-											item.isNull = true;
+											item.setNull(true);
 											System.out.println("Item invalidated!");
 									}
 									if (this.searchTitlesOnly == true) {
 										for (String pk : this.searchKeywordsPositive) {
-											if (!item.itemName.toLowerCase().contains(pk.toLowerCase()) && !pk.isBlank()) {
-												item.isNull = true;
+											if (!item.getItemName().toLowerCase().contains(pk.toLowerCase()) && !pk.isBlank()) {
+												item.setNull(true);
 											}
 										}
 									}
 									if (this.hasMakeModelOnly == true) {
 										System.out.println("MAKEMODELTRUE");
-										if (item.make.isBlank() && item.model.isBlank())
-											item.isNull = true;
+										if (item.getMake().isBlank() && item.getModel().isBlank())
+											item.setNull(true);
 									}
 									if (this.bundleDuplicates == true) {
 										for (Item it : itemarraylist) {
-											if (item.itemName.contentEquals(it.itemName) || item.description.contains(it.description)) {
-												item.isNull = true;
+											if (item.getItemName().contentEquals(it.getItemName()) || item.getDescription().contains(it.getDescription())) {
+												item.setNull(true);
 											}
 										}
 									}
 									if (this.hideAllDuplicates == true) {
 										ArrayList<Item> scheduledforremoval = new ArrayList<Item>();
 										for (Item it : itemarraylist) {
-											if (item.itemName.contentEquals(it.itemName) || item.description.contentEquals(it.description)) {
-												item.isNull = true;
+											if (item.getItemName().contentEquals(it.getItemName()) || item.getDescription().contentEquals(it.getDescription())) {
+												item.setNull(true);
 												scheduledforremoval.add(it);
 											}
 										}
@@ -225,13 +225,13 @@ public class SearchQuery {
 									if (this.searchKeywordsNegative.length != 0) {
 										for (String p : this.searchKeywordsNegative) {
 											if (this.searchTitlesOnly == true) {
-												if (item.itemName.toLowerCase().contains(p.toLowerCase())) {
-													item.isNull = true;
+												if (item.getItemName().toLowerCase().contains(p.toLowerCase())) {
+													item.setNull(true);
 												}
 											}
 											else {
-												if (item.itemName.toLowerCase().contains(p.toLowerCase()) || item.description.toLowerCase().contains(p.toLowerCase())) {
-													item.isNull = true;
+												if (item.getItemName().toLowerCase().contains(p.toLowerCase()) || item.getDescription().toLowerCase().contains(p.toLowerCase())) {
+													item.setNull(true);
 												}
 											}
 										}
@@ -240,7 +240,7 @@ public class SearchQuery {
 								} catch (NullPointerException e) {
 									
 								}
-								if (item.isNull == false && this.maxPrice >= this.minPrice && item.itemPrice >= this.minPrice && item.itemPrice <= this.maxPrice) {
+								if (item.isNull() == false && this.maxPrice >= this.minPrice && item.getItemPrice() >= this.minPrice && item.getItemPrice() <= this.maxPrice) {
 									
 									itemarraylist.add(item);
 									System.out.println(item + "\n");
@@ -357,6 +357,20 @@ public class SearchQuery {
 		//SearchQuery query = new SearchQuery(testkeywords);
 		//SearchResult result = query.getSearch();
 		//result.printItems();
+	}
+
+	/**
+	 * @return the search
+	 */
+	public Search getSearchObject() {
+		return search;
+	}
+
+	/**
+	 * @param search the search to set
+	 */
+	public void setSearchObject(Search search) {
+		this.search = search;
 	}
 	
 }
