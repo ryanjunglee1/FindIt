@@ -16,8 +16,13 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
-//Class that represents an item in craigslist
+/**
+ * An object that represents a single posting/listing in Craigslist
+ * @author Arti Shala, Ryan Lee
+ *
+ */
 public class Item {
+	//data fields
 	private String itemName, make = "", model = "", description, location, datePosted, dateUpdated, condition = "", dimensions;
 	private float itemPrice;
 	private LocalDateTime dateTimePosted,dateTimeUpdated;
@@ -30,6 +35,12 @@ public class Item {
 	private boolean isNull;
 	private String postID;
 	
+	/**
+	 * Contstructs a new item object from an item URL
+	 * @param itemURL the URL of the Craigslist item/listing
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 	public Item(String itemURL) throws NumberFormatException, IOException {
 		try {
 			this.setItemURL(itemURL);
@@ -154,6 +165,9 @@ public class Item {
 		this.setDescription(description);
 	}
 	
+	/**
+	 * @return String in this format: [item name] $[item price]
+	 */
 	@Override
 	public String toString() {
 		return this.getItemName() + " $" + this.getItemPrice();
@@ -172,6 +186,10 @@ public class Item {
 		}
 	}
 	
+	/**
+	 * Opens the full image of the item if it has one
+	 * @throws URISyntaxException
+	 */
 	public void openFullImg() throws URISyntaxException {
 		if (!this.itemURI.equals(null)) {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
@@ -185,13 +203,17 @@ public class Item {
 		}
 	}
 	
-
+	/**
+	 * Checks to see if two items are the same item using their post ID
+	 * @param i the item to be compared with this item
+	 * @return true if they have the same postID, false if otherwise
+	 */
 	public boolean equals(Item i) {
 		if (this.postID.contentEquals(i.postID))
 			return true;
 		return false;
 }
-
+	
 	public static String removeFormats(String str) {
 		return str.replaceAll("&amp;", "&");
 	}

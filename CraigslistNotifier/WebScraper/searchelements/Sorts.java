@@ -1,4 +1,9 @@
 package searchelements;
+/**
+ * a class containing all the generic sort methods used throughout the project
+ * @author Ryan Lee
+ *
+ */
 public class Sorts {
 	public static int MIN_LENGTH_QUICKSORT = 4;
 	public static <T extends Comparable<? super T>> void insertionSort(T[] array, int first, int last) {

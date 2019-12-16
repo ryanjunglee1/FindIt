@@ -11,12 +11,26 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+/**
+ * an object that represents a basic search query in Craigslist
+ * @author Ryan Lee
+ *
+ */
 public class Search {
+	//data fields
 	protected Document website;
 	protected HashMap<String, String> stateMap, areaMap, subAreaMap, topicMap, categoryMap;
 	protected String state, area, subArea, topic, category;
 	protected boolean hasArea, hasSubArea, hasCategory;
-
+	
+	/**
+	 * Creates a new search object for a basic search in CL
+	 * @param state the state to be set for the search
+	 * @param area the area of the state to be searched, if applicable
+	 * @param subArea the subarea of the area/state to be searched, if applicable
+	 * @param topic the topic to be searched
+	 * @param category the category to be searched
+	 */
 	public Search(String state, String area, String subArea, String topic, String category) {
 		this.state = state;
 		this.area = area;
@@ -45,6 +59,9 @@ public class Search {
 		}
 	}
 
+	/**
+	 * Creates an empty search
+	 */
 	public Search() {
 		this("", "", "", "", "");
 	}

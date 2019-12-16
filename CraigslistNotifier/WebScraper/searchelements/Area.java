@@ -11,6 +11,11 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+/**
+ * Used to represent an Area in Craigslist when building a search
+ * @author Ryan Lee
+ *
+ */
 public class Area extends State {
 
 	public Area(Search search, String area) {

@@ -38,17 +38,17 @@ import searchelements.SearchQuery;
 import searchelements.Sorts;
 
 /**
- * The main GUI that accepts a search parameter (i.e., TV, camera, etc.) from a user and creates a searchQuery
- * for the desired item on Craigslist. Then software will display the search results in a simple yet meaningful
- * way to the user. 
+ * The main GUI. The user will enter their search parameters here, and a SearchQuery will be created that will collect and display the
+ * results using a SearchResult Object
  * @author Updated to JavaFX: Weezha Yahyapoor, Original: Arti Shala and Ryan Lee 
  * @version 1.0
  */
 public class UpdatedGUI extends Application {
-
-	Search search = new Search();
-	String[] statechoices = search.getStateMap().keySet().toArray(new String[0]);
 	
+	Search search = new Search(); //Search object to put basic parameters
+	String[] statechoices = search.getStateMap().keySet().toArray(new String[0]); //all states scraped from CL
+	
+	//Objects that exist on the GUI
 	private ComboBox<String> stateselect = new ComboBox<>();
 	private ComboBox<String> areaselect = new ComboBox<>();
 	private ComboBox<String> subareaselect = new ComboBox<>();
@@ -342,8 +342,9 @@ public class UpdatedGUI extends Application {
 		});
 		
 		/**
-		 * Event listener for the Search button. This event listener executes a search query 
-		 * for a customer's desired search item while also considering selected filters.  
+		 * Event listener for the Search button. This event listener is responsible for creating an Options object
+		 * Search Object, and SearchQuery object which will then collect and display the results 
+		 * @author Arti Shala
 		 */
 		button.setOnAction((e) -> {
 			
@@ -802,6 +803,7 @@ public class UpdatedGUI extends Application {
 
          /**
           * Event handlers to capture a user's input for including or excluding a keyword in/from a search query.
+          * @author Arti Shala
           */
          aButton.setOnAction((e) -> {
         	 if (aField.getText().isBlank()) {

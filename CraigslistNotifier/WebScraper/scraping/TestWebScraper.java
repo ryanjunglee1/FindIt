@@ -3,7 +3,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ * 
+ * This class is only used for testing
+ *
+ */
 public class TestWebScraper {
 
     public static void main(String args[]) throws NumberFormatException, IOException {

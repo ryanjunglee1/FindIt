@@ -15,12 +15,21 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
-
+/**
+ * The object used to generate a base URL to scrape for items, based on a search object
+ * @author Ryan Lee
+ *
+ */
 public class WebScraper {
 	private Document website;
 	private Search search;
 	private Scanner scan;
 
+	/**
+	 * Initializes the webscraper 
+	 * @param search the search object used to generate the base URL
+	 * @param scan used for testing
+	 */
 	public WebScraper(Search search, Scanner scan) {
 		this.search = search;
 		this.scan = scan;
@@ -47,7 +56,11 @@ public class WebScraper {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
+	/**
+	 * Used for testing
+	 * @param scan
+	 */
 	public void initialize(Scanner scan) {
 		String[] arr = search.getStateMap().keySet().toArray(new String[0]);
 		sortArray(arr, 0, arr.length - 1);
@@ -118,7 +131,10 @@ public class WebScraper {
 			sortArray(arr, index + 1, high);
 		}
 	}
-
+	
+	/**
+	 * @return string representation of the webscraper object
+	 */
 	@Override
 	public String toString() {
 		if (getWebsite() == null)

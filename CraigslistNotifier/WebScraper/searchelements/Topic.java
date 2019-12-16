@@ -11,6 +11,10 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+/**
+ * An object representing a subarea for a search
+ * @author Ryan Lee
+ */
 public class Topic extends SubArea{
 
 	public Topic(Search subArea, String topic) {

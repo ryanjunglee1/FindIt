@@ -37,12 +37,13 @@ import javax.swing.table.TableColumnModel;
 import scraping.Item;
 import searchelements.SearchQuery;
 
-/*
- * This class is used to contain an arrayList of items , the SearchQuery used to get those items, and update methods
- * that update the item list based on the update interval from the searchQuery, sends a notification to email upon
- * new items being added to the list
+/**
+ * An object that displays all the items generated through a SearchQuery in a table and allows the user to set a time
+ * interval to update the items from that SearchQuery and be notified via email when new items are posted that fit the 
+ * SearchQuery
  * @author Arti Shala
  * @version 1.0
+ * @see SearchQuery
  */
 public class SearchResult {
 	//data fields
@@ -70,7 +71,12 @@ public class SearchResult {
 	private JScrollPane scrollpane;
 	private String[] columnNames = {"Item Name", "Item Price", "button"};
 	
-	//initialize the searchresult gui with the list of items provided by searchquery
+	/**
+	 * Creates a SearchResult with the given items in an ArrayList and a searchquery used to get updates
+	 * @param results all the items generated via the searchquery object
+	 * @param title title to be set (first positive keyword)
+	 * @param query the searchquery object that generated the results
+	 */
 	public SearchResult(ArrayList<Item> results, String title, SearchQuery query) {
 		this.query = query;
 		//itemlist set by constructor args, JTable populated with makedata method of searchresult and tablemodel set with mouselistener
@@ -107,6 +113,9 @@ public class SearchResult {
 		updateButton.setBackground(Color.green);
 		updateButton.setOpaque(true);
 		updateButton.setBorderPainted(false);
+		/**
+		 * Creates a new thread and updates the table by calling the updateTable method
+		 */
 		updateButton.addActionListener(new AbstractAction("Enable") {
 
 			@Override
@@ -180,6 +189,11 @@ public class SearchResult {
 		
 	}
 	
+	/**
+	 * Executes the updateSearch method of the searchquery and compares the resulting items with the items in the table currently
+	 * and emails the user if a new item is added
+	 * @param items the items of this searchresult to be compared with for new results
+	 */
 	public void updateTable(ArrayList<Item> items) {
 		ArrayList<Item> originalList = this.itemList;
 		LocalDateTime originalUpdateTime = this.lastUpdated;
@@ -235,6 +249,11 @@ public class SearchResult {
 		
 	}
 	
+	/**
+	 * A method that uses regex to check if a string fits the expected format of an email
+	 * @param email the string to check
+	 * @return true if the string is valid format for an email, false otherwise
+	 */
 	public static boolean isValidEmail(String email) 
     { 
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
@@ -248,11 +267,18 @@ public class SearchResult {
         return pat.matcher(email).matches(); 
     } 
 	
+	/**
+	 * Adds an item to the results
+	 * @param i item to be added
+	 */
 	public void add(Item i) {
 		this.itemList.add(i);
 		this.resultSize++;
 	}
 	
+	/**
+	 * Prints all the items in the results
+	 */
 	public void printItems() {
 		Iterator itemIterator = itemList.iterator();
 		while (itemIterator.hasNext()) {
@@ -261,6 +287,12 @@ public class SearchResult {
 		}
 	}
 	
+	/**
+	 * Generates a two dimensional Object Array that represents all the items in the results
+	 * Used to properly format the JTable using itemtablemodel
+	 * @return a two dimensional Object array containing all the items with formatted data for the table
+	 * @see ItemTableModel
+	 */
 	public Object[][] makeData() {
 		Object[][] data = new Object[this.itemList.size()][7];
 		for (int i = 0; i < this.itemList.size(); i++) {
@@ -289,6 +321,11 @@ public class SearchResult {
 		return data;
 	}
 	
+	/**
+	 * if possible, opens a web page in the default browser using a given URI
+	 * @param uri the website to open
+	 * @return true if successful, false if otherwise
+	 */
 	protected static boolean openWebpage(URI uri) {
 	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
 	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -302,7 +339,11 @@ public class SearchResult {
 	    return false;
 	}
 	
-	
+	/**
+	 * Class used to allow the JTable to display buttons correctly and respond to clicks
+	 * @author Arti Shala
+	 *
+	 */
 	private static class JTableButtonRenderer implements TableCellRenderer {        
 	    @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 	        JButton button = (JButton)value;
@@ -311,12 +352,20 @@ public class SearchResult {
 	    }
 	}
 
-
+	/**
+	 * 
+	 * @return the table object
+	 */
 	public JTable getTable() {
 		// TODO Auto-generated method stub
 		return this.table;
 	}
 	
+	/**
+	 * Listens for mouseclicks on a specific table cell and engages the button action of that cell
+	 * @author Arti Shala
+	 *
+	 */
 	private static class JTableButtonMouseListener extends MouseAdapter {
         private final JTable table;
 
@@ -338,13 +387,14 @@ public class SearchResult {
         }
     }
 	
+	/**
+	 * @return the item at the specified index
+	 */
 	public Item getItem(int i) {
 		return this.itemList.get(i);
 	}
 }
-/*
- * the next block of code defines classes required to properly render the table onto the GUI
- */
+
 
 
 

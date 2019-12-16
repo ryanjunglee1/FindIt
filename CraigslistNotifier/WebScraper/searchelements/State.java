@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
-
+/**
+ * An object representing a state for a search
+ * @author Ryan Lee
+ */
 public class State extends Search {
 
 	public State(String state) {
